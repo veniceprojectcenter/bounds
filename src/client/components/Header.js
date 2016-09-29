@@ -6,14 +6,13 @@ const Header = ({ isLoggedIn }) => {
         <div className="ui fixed inverted menu">
             <div className="ui container">
                 <div className="header item">
-                    React Starter
+                    Bounds
                 </div>
                 <Link className="item" to="/">Home</Link>
-                <Link className="item" to="/users">Users</Link>
                 {!isLoggedIn ?
                 <Link className="item" to="/login">Login</Link>
                 :
-                <Link className="item" to="/profile">Account</Link>
+                null
                 }
                 {!isLoggedIn ?
                 <Link className="item" to="/signup">Signup</Link>

@@ -40,6 +40,11 @@ class MarkersStore {
     static getAll() {
         return this.state.markers;
     }
+
+    static getMarkerNumber(search) {
+        let query = _.filter(this.state.markers, e => { return e.number[0] == search; });
+        return query && query[0];
+    }
 }
 
 module.exports = alt.createStore(MarkersStore, 'MarkersStore');
