@@ -28,6 +28,7 @@
     "test-react:coverage": "nwb test --coverage",
     "test-react:watch": "nwb test --server"
   },
+  "postinstall": "npm run build",
   "dependencies": {
     "alertify.js": "^1.0.12",
     "alt": "^0.18.4",
