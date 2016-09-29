@@ -1,0 +1,14 @@
+{
+  "host": "localhost",
+  "port": 3030,
+  "mongodb": "mongodb://localhost:27017/bounds",
+  "public": "../public/",
+  "auth": {
+    "token": {
+      "secret": "QEAQicAPXiajXCaOyDuyrFjoFItzzMbi+5en096u7XKIxUfXk+enbGEnKiZCKInIyuFGUsIJ+Rrrl+mvmQ3i9w=="
+    },
+    "local": {},
+    "successRedirect": "/profile.html"
+  }
+}
+
