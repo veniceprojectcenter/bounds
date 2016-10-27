@@ -152,7 +152,9 @@ class MarkersMap extends Component {
             }
 
             info = (<div className="marker-info">
-                <div className="marker-number">Marker #{marker.number[0]}</div>
+                <div className="marker-number">Marker #{marker.number[0]} {marker.isPresent ? "" : "(missing)"}</div>
+                <a target="_blank" href={"http://maps.google.com/?daddr=" + marker.coordinates[0] + "," + marker.coordinates[1]}>Navigation</a><br />
+
 
                 <Dropzone onDrop={(e) => {this.onDrop.call(_this, e) }} multiple={false} accept="image/*">
                   <div>Try dropping some files here, or click to select files to upload.</div>
@@ -160,14 +162,17 @@ class MarkersMap extends Component {
                
                 {images}
 
-
-                Is Present <input type="text" value={marker.isPresent} /><br />
-                Region <input type="text" value={marker.otherData.localizzaz} /><br />
-                <a target="_blank" href={"http://maps.google.com/?daddr=" + marker.coordinates[0] + "," + marker.coordinates[1]}>Navigation</a><br />
-                Exact Address <input type="text" value={marker.address} /><br />
                 {distanceFromPrevMaker}
                 <br/>Transit from Piazzale Roma<br />
                 {transit}
+
+                <br />
+                <br />
+
+                Is Present <input type="text" value={marker.isPresent} /><br />
+                Region <input type="text" value={marker.otherData.localizzaz} /><br />
+                Exact Address <input type="text" value={marker.address} /><br />
+                
             </div>);
 
             if (this.state.changed) {
