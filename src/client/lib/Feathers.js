@@ -5,10 +5,10 @@ import io from 'socket.io-client';
 import authentication from 'feathers-authentication/client';
 
 
-const socket = io('http://bounds.herokuapp.com/');
+const socket = io('http://localhost:3030/');
 const app = feathers()
   .configure(hooks())
-  .configure(socketio(socket))
+  .configure(socketio(socket, {timeout: 100000}))
   .configure(authentication({ storage: window.localStorage }));
 
 export default app;

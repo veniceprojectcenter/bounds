@@ -21,8 +21,6 @@ class MarkersMap extends Component {
     }
 
     componentDidMount() {
-        navigator.geolocation.getCurrentPosition(this.showPosition, this.showPosition, {enableHighAccuracy:true, maximumAge: 60000,timeout:60000 });
-
         this.state.map = L.map('map').setView([45.4371300, 12.3326500], 10);
         let mapLink = '<a href="http://www.esri.com/">Esri</a>';
         let wholink = 'i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community';
@@ -139,9 +137,10 @@ class MarkersMap extends Component {
 
             if (marker.images && marker.images.length > 0) {
                 images = marker.images.map((img, i) => {
+                    let url = "http://bounds-imgs.s3-website-us-east-1.amazonaws.com/" + img.src;
                     return (
                         <div>
-                            <a href={"/uploads/" + img.src} target="_blank"><img src={"/uploads/" + img.src} height="100px" /></a>
+                            <a href={url} target="_blank"><img src={url} height="100px" /></a>
                             Side: <Select value={img.side} options={options} onChange={(e) => { 
                                 let marker = this.state.marker; 
                                 marker.images[i].side = e.value; 

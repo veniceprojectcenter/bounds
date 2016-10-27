@@ -7,12 +7,25 @@ const multipartMiddleware = multer();
 const dauria = require('dauria');
 const blobService = require('feathers-blob');
 const fs = require('fs-blob-store');
-const blobStorage = fs(path.join(__dirname, '../../../../public/uploads'));
+//const blobStorage = fs(path.join(__dirname, '../../../../public/uploads'));
+
+const AWS = require('aws-sdk');
+const S3BlobStore = require('s3-blob-store');
+
 
 module.exports = function() {
   const app = this;
 
-  
+  const s3 = new AWS.S3({
+    accessKeyId: app.get('aws').key,
+    secretAccessKey: app.get('aws').secret,
+  });
+
+  const blobStore = S3BlobStore({
+    client: s3,
+    bucket: app.get('aws').bucket
+  });
+
   // Initialize our service with any options it requires
   app.use('/uploads', 
     multipartMiddleware.single('uri'),
@@ -24,7 +37,7 @@ module.exports = function() {
         next();
     },
 
-    blobService({Model: blobStorage})
+    blobService({Model: blobStore})
   );
 
   // Get our initialize service to that we can bind hooks

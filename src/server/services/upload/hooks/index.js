@@ -15,6 +15,10 @@ exports.before = {
             const uri = dauria.getBase64DataURI(file.buffer, file.mimetype);
             hook.data = {uri: uri};
         }
+    },
+
+    function(hook) {
+      hook.params.s3 = { ACL: 'public-read' }; // makes uploaded files public
     }
   ],
   update: [],

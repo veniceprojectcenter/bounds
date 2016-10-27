@@ -3,6 +3,11 @@
   "port": "PORT",
   "mongodb": "MONGODB_URI",
   "public": "../public/",
+  "aws": {
+    "key": "AWS_ACCESS_KEY_ID",
+    "secret": "AWS_SECRET_ACCESS_KEY",
+    "bucket": "AWS_BUCKET"
+  },
   "auth": {
     "token": {
       "secret": "FEATHERS_AUTH_SECRET"
