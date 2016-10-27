@@ -31,4 +31,5 @@ node_modules
 data/
 dist/
 public/*
-uploads
+!public/uploads
+public/uploads/*

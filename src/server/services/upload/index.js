@@ -7,7 +7,7 @@ const multipartMiddleware = multer();
 const dauria = require('dauria');
 const blobService = require('feathers-blob');
 const fs = require('fs-blob-store');
-const blobStorage = fs(path.join(__dirname, '../../../../uploads'));
+const blobStorage = fs(path.join(__dirname, '../../../../public/uploads'));
 
 module.exports = function() {
   const app = this;

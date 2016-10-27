@@ -13,6 +13,7 @@ const markerSchema = new Schema({
   number: { type: Array, required: true },
   isPresent: { type: Boolean, required: true },
   coordinates: { type: Array, required: true },
+  images: {type: Array, required: true },
   otherData: { type: Object },
   createdAt: { type: Date, 'default': Date.now },
   updatedAt: { type: Date, 'default': Date.now }
