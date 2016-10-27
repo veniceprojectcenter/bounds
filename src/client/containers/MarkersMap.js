@@ -141,7 +141,7 @@ class MarkersMap extends Component {
                 images = marker.images.map((img, i) => {
                     return (
                         <div>
-                            <img src={"/uploads/" + img.src} height="100px" />
+                            <a href={"/uploads/" + img.src} target="_blank"><img src={"/uploads/" + img.src} height="100px" /></a>
                             Side: <Select value={img.side} options={options} onChange={(e) => { 
                                 let marker = this.state.marker; 
                                 marker.images[i].side = e.value; 
