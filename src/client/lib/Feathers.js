@@ -5,7 +5,7 @@ import io from 'socket.io-client';
 import authentication from 'feathers-authentication/client';
 
 
-const socket = io('http://localhost:3030/');
+const socket = io('http://bounds.herokuapp.com/');
 const app = feathers()
   .configure(hooks())
   .configure(socketio(socket, {timeout: 100000}))
