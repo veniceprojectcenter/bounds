@@ -10,14 +10,10 @@ body {
 
 
 #map { 
-	height: 500px; 
-	width: 50%;
-	float: left;
+	height: 500px;
 }
 
 #data {
-	width: 50%;
-	float: left;
 	overflow: hidden;
 
 	textarea {
@@ -26,6 +22,15 @@ body {
 	}
 }
 
-.info input {
-	width: 200px;
+.marker-info {
+	margin-top: 30px;
+	
+	input {
+		width: 200px;
+	}
+
+	.marker-number {
+		font-size: 22px;
+		margin-bottom: 10px;
+	}
 }

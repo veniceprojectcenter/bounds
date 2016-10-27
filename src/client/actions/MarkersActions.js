@@ -3,11 +3,11 @@ import Feathers from '../lib/Feathers';
 
 class MarkersActions {
     fetchMarkers() {
-        const postsService = Feathers.service('markers');
+        const markersService = Feathers.service('markers');
 
         return (dispatch) => {
             
-            postsService.find().then(page => {
+            markersService.find().then(page => {
                 this.updateMarkers(page.data);
             }).catch((err) => {
                 this.failed(err);
@@ -17,6 +17,18 @@ class MarkersActions {
 
     updateMarkers(markers) {
         return markers;
+    }
+
+    saveMarker(marker, attachedFile) {
+        let _this = this;
+        console.log(attachedFile);
+        const markersService = Feathers.service('markers');
+        const uploadsService = Feathers.service('uploads');
+        uploadsService.create({uri: attachedFile})
+            .then(function(response){
+                console.log(response);
+                _this.fetchMarkers();
+            });
     }
 
     failed(errorMessage) {

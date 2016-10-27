@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {Link} from 'react-router';
+import Dropzone from 'react-dropzone';
 
 import MarkersActions from '../actions/MarkersActions';
 import MarkersStore from '../stores/MarkersStore';
@@ -43,11 +44,23 @@ class MarkersMap extends Component {
 		}
     }
 
+    onDrop(acceptedFiles) {
+        const reader  = new FileReader();
+        let {marker} = this.state;
+
+        reader.readAsDataURL(acceptedFiles[0]);
+        reader.addEventListener("load", function () {
+                console.log('encoded file: ', reader.result);
+                MarkersActions.saveMarker(marker, reader.result);
+            }, false);
+    }
+
     render() {
         const { marker } = this.state;
 
         let info;
         let transitMap;
+        let _this = this;
 
         if (marker) {
             let transit = "Not reachable";
@@ -95,10 +108,17 @@ class MarkersMap extends Component {
                 }  
             }
 
-            info = (<div className="info">
-                Marker Number <input type="text" value={marker.number[0]} /><br />
+            info = (<div className="marker-info">
+                <div className="marker-number">Marker #{marker.number[0]}</div>
+
+                <Dropzone onDrop={(e) => {this.onDrop.call(_this, e) }}>
+                  <div>Try dropping some files here, or click to select files to upload.</div>
+                </Dropzone>
+               
+
                 Is Present <input type="text" value={marker.isPresent} /><br />
                 Region <input type="text" value={marker.otherData.localizzaz} /><br />
+                <a target="_blank" href={"http://maps.google.com/?daddr=" + marker.coordinates[0] + "," + marker.coordinates[1]}>Navigation</a><br />
                 Latitude <input type="text" value={marker.coordinates[0]} /><br />
                 Longitude <input type="text" value={marker.coordinates[1]} /><br />
                 Exact Address <input type="text" value={marker.address} /><br />
