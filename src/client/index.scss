@@ -23,6 +23,10 @@ body {
 }
 
 .marker-info {
+	span {
+		text-weight: bold;
+	}
+	
 	.Select {
 		width: 200px;
 		display: inline-block;

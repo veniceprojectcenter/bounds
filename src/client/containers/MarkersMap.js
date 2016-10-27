@@ -102,9 +102,9 @@ class MarkersMap extends Component {
                 });
 
                 transit = (<div>
-                    Time <input type="text" value={marker.transit.legs[0].duration.text} /><br />
-                    Distance <input type="text" value={marker.transit.legs[0].distance.text} /><br />
-                    Total Walk <input type="text" value={totalWalk + 'm'} /><br />
+                    Time: <span>{marker.transit.legs[0].duration.text}</span><br />
+                    Distance: <span>{marker.transit.legs[0].distance.text}</span><br />
+                    Total Walk: <span>{totalWalk + 'm'}</span><br />
                     {navigation}
                 </div>);
 
@@ -168,9 +168,9 @@ class MarkersMap extends Component {
                 <br />
                 <br />
 
-                Is Present <input type="text" value={marker.isPresent} /><br />
-                Region <input type="text" value={marker.otherData.localizzaz} /><br />
-                Exact Address <input type="text" value={marker.address} /><br />
+                Is Present: <span>{marker.isPresent}</span><br />
+                Region: <span>{marker.otherData.localizzaz}</span><br />
+                Exact Address: <span>{marker.address}</span><br />
                 
             </div>);
 
