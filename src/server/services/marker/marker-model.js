@@ -10,10 +10,11 @@ const Schema = mongoose.Schema;
 
 const markerSchema = new Schema({
   coordinates: { type: Array, required: true },
+  //clockwiseNorthDelta: {type: String, required: true},
   number: { type: Array, required: true },
   isPresent: { type: Boolean, required: true },
   coordinates: { type: Array, required: true },
-  images: {type: Array, required: true },
+  images: {type: Array },
   otherData: { type: Object },
   createdAt: { type: Date, 'default': Date.now },
   updatedAt: { type: Date, 'default': Date.now }

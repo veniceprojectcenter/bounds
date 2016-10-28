@@ -17,7 +17,7 @@ class MarkersMap extends Component {
     }
 
     handleClick(marker) {
-        this.setState({marker: marker});
+        this.setState({marker: marker, changed: false});
     }
 
     componentDidMount() {
@@ -119,20 +119,24 @@ class MarkersMap extends Component {
             if (prevMarker && prevMarker.driving && prevMarker.driving.legs.length > 0) {
                 if (marker.driving && marker.driving.legs.length > 0) {
                     distanceFromPrevMaker = prevMarker.driving.legs[0].distance.value - marker.driving.legs[0].distance.value;
-                    distanceFromPrevMaker = (<div><br />Distance from prev marker <span>{Math.abs(distanceFromPrevMaker)}m</span><br /></div>);
+                    distanceFromPrevMaker = (<div>Distance from prev marker <span>{Math.abs(distanceFromPrevMaker)}m</span><br /></div>);
                 }  
             }
 
             let images;
 
             var options = [
-                { value: 0, label: '<Pick side>' },
+                { value: 0, label: '<Pick type/side>' },
                 { value: 1, label: 'North' },
                 { value: 2, label: 'East' },
                 { value: 3, label: 'South' },
                 { value: 4, label: 'West' },
                 { value: 5, label: 'Top' },
-                { value: 6, label: 'Other' }
+                { value: 6, label: 'Surrounding area' },
+                { value: 7, label: 'General photo' },
+                { value: 8, label: 'Old photo' },
+                { value: 9, label: 'Old map' },
+                { value: 10, label: 'Other' }
             ];
 
             if (marker.images && marker.images.length > 0) {
@@ -141,25 +145,65 @@ class MarkersMap extends Component {
                     return (
                         <div>
                             <a href={url} target="_blank"><img src={url} height="100px" /></a>
-                            Side: <Select value={img.side} options={options} onChange={(e) => { 
+                            Side: <Select value={img.type} options={options} onChange={(e) => { 
                                 let marker = this.state.marker; 
-                                marker.images[i].side = e.value; 
+                                marker.images[i].type = e.value; 
                                 this.setState({marker: marker, changed: true}); }} />
                         </div>
                     );
                 });
             }
 
+            if (this.state.changed) {
+                saveButton = <div>
+                    <button onClick={this.saveMarker.bind(this)}>Save</button>
+                    <br />
+                    <br />
+                </div>;
+            }
+
             info = (<div className="marker-info">
                 <div className="marker-number">Marker #{marker.number[0]} {marker.isPresent ? "" : "(missing)"}</div>
                 <a target="_blank" href={"http://maps.google.com/?daddr=" + marker.coordinates[0] + "," + marker.coordinates[1]}>Navigation</a><br />
+                (also more directions below)<br />
 
+                <h2>Once there</h2>
+                <ol>
+                    <li>Place your phone on top of the marker</li>
+                    <li>Open compass and point (by rotating phone) towards North</li>
+                    <li>Now, start rotating clockwise until phone becomes parallel to one of the sides of the marker</li>
+                    <li><span>Fill-in:</span> How many degree did you rotate</li>
+                    <li>Click save below</li>
+                    <li><span>Fill-in:</span> Take photo of side of marker that is seen when you face the "adjusted-north". That is North side!</li>
+                    <li><span>Fill-in:</span> In a clockwise direction takes photos of other sides which are respectively (East, South and West)</li>
+                    <li>Click save blow</li>
+                </ol>
 
-                <Dropzone onDrop={(e) => {this.onDrop.call(_this, e) }} multiple={false} accept="image/*">
+                {saveButton}
+                {/* {marker.clockwiseNorthDelta}
+
+                <span>Clockwise rotation delta from North:</span> <input type="text" value={marker.clockwiseNorthDelta} onChange={(e) => { 
+                    let m = marker;
+                    m.clockwiseNorthDelta = e.target.value;
+                    console.log(m);
+                    _this.setState({marker: m, changed: true}); }} />
+                
+                <br />
+                <br /> */}
+
+                <Dropzone onDrop={(e) => { this.onDrop.call(_this, e) }} multiple={false} accept="image/*">
                   <div>Try dropping some files here, or click to select files to upload.</div>
                 </Dropzone>
+
                
                 {images}
+
+                <h2>More info</h2>
+                Is Present: <span>{marker.isPresent ? "yes" : "no"}</span><br />
+                Region: <span>{marker.otherData.localizzaz}</span><br />
+                Exact Address: <span>{marker.address}</span><br />
+
+                <h2>More directions</h2>
 
                 {distanceFromPrevMaker}
                 <br/>Transit from Piazzale Roma<br />
@@ -168,15 +212,9 @@ class MarkersMap extends Component {
                 <br />
                 <br />
 
-                Is Present: <span>{marker.isPresent}</span><br />
-                Region: <span>{marker.otherData.localizzaz}</span><br />
-                Exact Address: <span>{marker.address}</span><br />
+                
                 
             </div>);
-
-            if (this.state.changed) {
-                saveButton = <button onClick={this.saveMarker.bind(this)}>Save</button>;
-            }
         }
 
         return (
@@ -184,7 +222,6 @@ class MarkersMap extends Component {
                 <div id="map"></div>
                 <div id="data">
                     {info}
-                    {saveButton}
                     {transitMap}
                 </div>
             </div>
