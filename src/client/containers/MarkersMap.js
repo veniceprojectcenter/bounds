@@ -24,7 +24,7 @@ class MarkersMap extends Component {
         if (!marker.clockwiseNorthDelta) {
             marker.clockwiseNorthDelta = 0;
         }
-        this.setState({marker: marker, changed: false});
+        this.setState({marker: marker, changed: false, progress: null});
     }
 
     componentDidMount() {
@@ -70,14 +70,12 @@ class MarkersMap extends Component {
         let response = JSON.parse(file.xhr.response);
         let id = response && response.id;
 
-        console.log(response);
-
         MarkersActions.saveMarkerImage(marker, id);
     }
 
     saveMarker() {
         MarkersActions.saveMarker(this.state.marker);
-        this.setState({changed: false});
+        this.setState({changed: false, progress: null});
     }
 
     render() {
@@ -144,11 +142,11 @@ class MarkersMap extends Component {
 
             if (marker.images && marker.images.length > 0) {
                 images = marker.images.map((img, i) => {
-                    let url = "http://bounds-imgs.s3-website-us-east-1.amazonaws.com/" + img.src;
+                    let url = "http://bounds-imgs.s3-website-us-east-1.amazonaws.com/" + (img && img.src);
                     return (
                         <div>
                             <a href={url} target="_blank"><img src={url} height="100px" /></a>
-                            Side: <Select value={img.type} options={options} onChange={(e) => { 
+                            Side: <Select value={(img && img.type)} options={options} onChange={(e) => { 
                                 let marker = this.state.marker; 
                                 marker.images[i].type = e.value; 
                                 this.setState({marker: marker, changed: true}); }} />
@@ -173,7 +171,7 @@ class MarkersMap extends Component {
                 uploadMultiple: false
             };
             var eventHandlers = { complete: (file) => {alert('done'); _this.onDrop(file); },
-            uploadprogress: (e, a) => {console.log(a)} }
+            uploadprogress: (e, a) => {_this.setState({progress: a}); console.log(a); } }
             var djsConfig = {addRemoveLinks: true,
                 paramName: "uri",
                 uploadMultiple: false,
@@ -208,7 +206,7 @@ class MarkersMap extends Component {
                 <br />
 
 
-
+                {this.state.progress}
                 <DropzoneComponent config={componentConfig}
                        eventHandlers={eventHandlers}
                        djsConfig={djsConfig} />
