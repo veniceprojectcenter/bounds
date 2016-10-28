@@ -17,6 +17,9 @@ class MarkersMap extends Component {
     }
 
     handleClick(marker) {
+        if (!marker.clockwiseNorthDelta) {
+            marker.clockwiseNorthDelta = 0;
+        }
         this.setState({marker: marker, changed: false});
     }
 
@@ -180,7 +183,6 @@ class MarkersMap extends Component {
                 </ol>
 
                 {saveButton}
-                {/* {marker.clockwiseNorthDelta}
 
                 <span>Clockwise rotation delta from North:</span> <input type="text" value={marker.clockwiseNorthDelta} onChange={(e) => { 
                     let m = marker;
@@ -189,7 +191,7 @@ class MarkersMap extends Component {
                     _this.setState({marker: m, changed: true}); }} />
                 
                 <br />
-                <br /> */}
+                <br />
 
                 <Dropzone onDrop={(e) => { this.onDrop.call(_this, e) }} multiple={false} accept="image/*">
                   <div>Try dropping some files here, or click to select files to upload.</div>
