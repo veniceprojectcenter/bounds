@@ -3,9 +3,9 @@
   "port": 3030,
   "mongodb": "mongodb://localhost:27017/bounds",
   "aws": {
-    "key": "",
-    "secret": "",
-    "bucket": "bounds-imgs"
+    "key": "AWS_ACCESS_KEY_ID",
+    "secret": "AWS_SECRET_ACCESS_KEY",
+    "bucket": "AWS_BUCKET"
   },
   "public": "../public/",
   "auth": {

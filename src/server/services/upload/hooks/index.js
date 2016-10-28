@@ -2,7 +2,7 @@
 
 const globalHooks = require('../../../hooks');
 const hooks = require('feathers-hooks');
-
+const dauria = require('dauria');
 
 exports.before = {
   all: [],

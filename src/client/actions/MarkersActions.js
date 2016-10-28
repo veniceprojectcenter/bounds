@@ -19,25 +19,20 @@ class MarkersActions {
         return markers;
     }
 
-    saveMarkerImage(marker, attachedFile) {
+    saveMarkerImage(marker, id) {
         let _this = this;
-        console.log(attachedFile);
         const markersService = Feathers.service('markers');
-        const uploadsService = Feathers.service('uploads');
-        uploadsService.create({uri: attachedFile})
-            .then(function(response){
-                console.log(response);
-                var images = marker.images;
-                if (images && images.length > 0) {
-                    images.push({src: response.id});
-                } else {
-                    images = [{src: response.id}];
-                }
-                marker.images = images;
-                markersService.update(marker._id, marker).then(() => {
-                    _this.fetchMarkers();
-                });
-            });
+        
+        var images = marker.images;
+        if (images && images.length > 0) {
+            images.push({src: id});
+        } else {
+            images = [{src: id}];
+        }
+        marker.images = images;
+        markersService.update(marker._id, marker).then(() => {
+            _this.fetchMarkers();
+        });
         return null;
     }
 

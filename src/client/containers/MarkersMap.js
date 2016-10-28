@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import {Link} from 'react-router';
 import Dropzone from 'react-dropzone';
+import DropzoneComponent from 'react-dropzone-component';
 
 import MarkersActions from '../actions/MarkersActions';
 import MarkersStore from '../stores/MarkersStore';
@@ -9,6 +10,9 @@ import Select from 'react-select';
 
 // Be sure to include styles at some point, probably during your bootstrapping
 import 'react-select/dist/react-select.css';
+
+var ReactDOMServer = require('react-dom/server');
+import {URL} from '../lib/Constants';
 
 class MarkersMap extends Component {
     constructor() {
@@ -60,22 +64,18 @@ class MarkersMap extends Component {
 		}
     }
 
-    onDrop(acceptedFiles) {
-        const reader  = new FileReader();
+    onDrop(file) {
         let {marker} = this.state;
 
-        reader.readAsDataURL(acceptedFiles[0]);
-        reader.addEventListener("load", () => {
-            MarkersActions.saveMarkerImage(marker, reader.result);
-        }, false);
-    }
+        let response = JSON.parse(file.xhr.response);
+        let id = response && response.id;
 
-    showPosition(position) {
-        console.log(position.coords);
+        console.log(response);
+
+        MarkersActions.saveMarkerImage(marker, id);
     }
 
     saveMarker() {
-        console.log(this);
         MarkersActions.saveMarker(this.state.marker);
         this.setState({changed: false});
     }
@@ -165,6 +165,20 @@ class MarkersMap extends Component {
                 </div>;
             }
 
+            var componentConfig = {
+                iconFiletypes: ['.jpg', '.png', '.gif'],
+                showFiletypeIcon: true,
+                postUrl: URL + 'uploads',
+                paramName: "uri",
+                uploadMultiple: false
+            };
+            var eventHandlers = { complete: (file) => {alert('done'); _this.onDrop(file); },
+            uploadprogress: (e, a) => {console.log(a)} }
+            var djsConfig = {addRemoveLinks: true,
+                paramName: "uri",
+                uploadMultiple: false,
+                previewTemplate: ReactDOMServer.renderToStaticMarkup(<div>.</div>)};
+
             info = (<div className="marker-info">
                 <div className="marker-number">Marker #{marker.number[0]} {marker.isPresent ? "" : "(missing)"}</div>
                 <a target="_blank" href={"http://maps.google.com/?daddr=" + marker.coordinates[0] + "," + marker.coordinates[1]}>Navigation</a><br />
@@ -193,9 +207,15 @@ class MarkersMap extends Component {
                 <br />
                 <br />
 
-                <Dropzone onDrop={(e) => { this.onDrop.call(_this, e) }} multiple={false} accept="image/*">
+
+
+                <DropzoneComponent config={componentConfig}
+                       eventHandlers={eventHandlers}
+                       djsConfig={djsConfig} />
+
+                {/*<Dropzone onDrop={(e) => { this.onDrop.call(_this, e) }} multiple={false} accept="image/*">
                   <div>Try dropping some files here, or click to select files to upload.</div>
-                </Dropzone>
+                </Dropzone>*/}
 
                
                 {images}
