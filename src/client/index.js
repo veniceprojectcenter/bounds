@@ -7,9 +7,10 @@ import {Router, Route, browserHistory, IndexRoute} from 'react-router';
 import AppStore from './stores/AppStore';
 
 import App from './containers/App';
-import Dashboard from './pages/Dashboard';
+import Dashboard from './containers/Dashboard';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import Marker from './containers/Marker';
 
 let requireAuth = function(nextState, replace) {
   if (!AppStore.getState().isLoggedIn) {
@@ -35,6 +36,7 @@ render(
         <IndexRoute component={Dashboard}/>
         <Route path="login" component={Login} onEnter={requireNotAuth}/>
         <Route path="signup" component={Signup} onEnter={requireNotAuth}/>
+        <Route path="/marker/:id" component={Marker} onEnter={requireNotAuth}/>
         <Route path="*" component={Dashboard}/>
     </Route>
 </Router>, document.querySelector('#app'));

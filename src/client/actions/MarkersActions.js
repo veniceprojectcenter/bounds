@@ -6,7 +6,8 @@ class MarkersActions {
         const markersService = Feathers.service('markers');
 
         return (dispatch) => {
-            
+            dispatch();
+
             markersService.find().then(page => {
                 this.updateMarkers(page.data);
             }).catch((err) => {
@@ -17,23 +18,6 @@ class MarkersActions {
 
     updateMarkers(markers) {
         return markers;
-    }
-
-    saveMarkerImage(marker, id) {
-        let _this = this;
-        const markersService = Feathers.service('markers');
-        
-        var images = marker.images;
-        if (images && images.length > 0) {
-            images.push({src: id});
-        } else {
-            images = [{src: id}];
-        }
-        marker.images = images;
-        markersService.update(marker._id, marker).then(() => {
-            _this.fetchMarkers();
-        });
-        return null;
     }
 
     saveMarker(marker) {

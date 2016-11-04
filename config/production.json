@@ -1,6 +1,7 @@
 {
   "host": "bounds.herokuapp.com",
   "port": "PORT",
+  "dev": false,
   "mongodb": "MONGODB_URI",
   "public": "../public/",
   "aws": {

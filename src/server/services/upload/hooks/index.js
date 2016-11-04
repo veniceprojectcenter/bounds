@@ -30,7 +30,33 @@ exports.after = {
   all: [],
   find: [],
   get: [],
-  create: [],
+  create: [
+    (hook) => {
+      const markers = hook.app.service('markers');
+      let marker_id = hook.params.query.marker_id;
+      
+      return markers.get(marker_id).then(r => {
+        let marker = r;
+        if (!marker) {
+          hook.result.fail = res;
+          return hook;
+        }
+
+        var images = marker.images;
+        if (images) {
+          images.push({src: hook.result.id});
+        } else {
+          images = [{src: hook.result.id}];
+        }
+
+        marker.images = images;
+
+        return markers.update(marker_id, marker).then(e => {
+          hook.result.marker = e;
+          return hook;
+        });
+      });
+    }],
   update: [],
   patch: [],
   remove: []

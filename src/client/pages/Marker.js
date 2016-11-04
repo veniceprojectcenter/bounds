@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import {Link} from 'react-router';
-import Dropzone from 'react-dropzone';
 import DropzoneComponent from 'react-dropzone-component';
 
 import MarkersActions from '../actions/MarkersActions';
@@ -14,10 +13,18 @@ import 'react-select/dist/react-select.css';
 var ReactDOMServer = require('react-dom/server');
 import {URL} from '../lib/Constants';
 
-class MarkersMap extends Component {
-    constructor() {
-    	super();
-    	this.state = {changed: false, marker: null};
+class Marker extends Component {
+    constructor(props) {
+    	super(props);
+    	this.state = {changed: false, marker: props.marker};
+    }
+
+    componentWillReceiveProps(newProps) {
+        this.state = {changed: false, marker: newProps.marker};
+    }
+
+    componentDidMount() {
+        MarkersActions.fetchMarkers();
     }
 
     handleClick(marker) {
@@ -27,50 +34,13 @@ class MarkersMap extends Component {
         this.setState({marker: marker, changed: false, progress: null});
     }
 
-    componentDidMount() {
-        this.state.map = L.map('map').setView([45.4371300, 12.3326500], 10);
-        let mapLink = '<a href="http://www.esri.com/">Esri</a>';
-        let wholink = 'i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community';
-        L.tileLayer(
-            'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-            attribution: '&copy; '+mapLink+', '+wholink,
-            maxZoom: 18,
-            }).addTo(this.state.map);
-
-        let lc = L.control.locate().addTo(this.state.map);
-        //lc.start();
-
-        this.drawMarkers(this.props.markers);
-    }
-
-    componentWillReceiveProps(nextProps) {
-    	this.drawMarkers(nextProps.markers);
-    }
-
-    drawMarkers(markers) {
-    	let map = this.state.map;
-    	let _handle = this.handleClick;
-        const _this = this;
-
-        var emptyIcon = L.icon({
-            iconUrl: 'http://rvap.umbc.edu/wp-content/uploads/2012/03/greendot3.png',
-            iconSize: [30, 30],
-        });
-
-    	if(markers && markers.length > 0) {
-			markers.forEach(e => {
-				L.marker(e.coordinates, (e.isPresent ? null : {icon: emptyIcon})).on('click', () => { _handle.call(_this, e); }).addTo(map);
-            });
-		}
-    }
-
     onDrop(file) {
         let {marker} = this.state;
 
         let response = JSON.parse(file.xhr.response);
         let id = response && response.id;
 
-        MarkersActions.saveMarkerImage(marker, id);
+        this.setState({marker: response.marker});
     }
 
     saveMarker() {
@@ -86,7 +56,7 @@ class MarkersMap extends Component {
         let saveButton;
         let _this = this;
 
-        if (marker) {
+        if (marker && marker._id) {
             let transit = "Not reachable";
             if (marker.transit && marker.transit.legs && marker.transit.legs.length > 0) {
                 let totalWalk = 0;
@@ -128,13 +98,13 @@ class MarkersMap extends Component {
 
             var options = [
                 { value: 0, label: '<Pick type/side>' },
-                { value: 1, label: 'North' },
-                { value: 2, label: 'East' },
-                { value: 3, label: 'South' },
-                { value: 4, label: 'West' },
-                { value: 5, label: 'Top' },
+                { value: 1, label: 'Front face side #1' },
+                { value: 2, label: 'Side #2' },
+                { value: 3, label: 'Side #3' },
+                { value: 4, label: 'Side #4' },
+                //{ value: 5, label: 'Top' },
                 { value: 6, label: 'Surrounding area' },
-                { value: 7, label: 'General photo' },
+                { value: 7, label: 'Approach photo' },
                 { value: 8, label: 'Old photo' },
                 { value: 9, label: 'Old map' },
                 { value: 10, label: 'Other' }
@@ -166,12 +136,12 @@ class MarkersMap extends Component {
             var componentConfig = {
                 iconFiletypes: ['.jpg', '.png', '.gif'],
                 showFiletypeIcon: true,
-                postUrl: URL + 'uploads',
+                postUrl: URL + 'uploads?marker_id=' + marker._id,
                 paramName: "uri",
                 uploadMultiple: false
             };
             var eventHandlers = { complete: (file) => {alert('done'); _this.onDrop(file); },
-            uploadprogress: (e, a) => {_this.setState({progress: a}); console.log(a); } }
+            uploadprogress: (e, a) => {_this.setState({progress: Math.round(a)}); console.log(a); } }
             var djsConfig = {addRemoveLinks: true,
                 paramName: "uri",
                 uploadMultiple: false,
@@ -181,18 +151,6 @@ class MarkersMap extends Component {
                 <div className="marker-number">Marker #{marker.number[0]} {marker.isPresent ? "" : "(missing)"}</div>
                 <a target="_blank" href={"http://maps.google.com/?daddr=" + marker.coordinates[0] + "," + marker.coordinates[1]}>Navigation</a><br />
                 (also more directions below)<br />
-
-                <h2>Once there</h2>
-                <ol>
-                    <li>Place your phone on top of the marker</li>
-                    <li>Open compass and point (by rotating phone) towards North</li>
-                    <li>Now, start rotating clockwise until phone becomes parallel to one of the sides of the marker</li>
-                    <li><span>Fill-in:</span> How many degree did you rotate</li>
-                    <li>Click save below</li>
-                    <li><span>Fill-in:</span> Take photo of side of marker that is seen when you face the "adjusted-north". That is North side!</li>
-                    <li><span>Fill-in:</span> In a clockwise direction takes photos of other sides which are respectively (East, South and West)</li>
-                    <li>Click save blow</li>
-                </ol>
 
                 {saveButton}
 
@@ -210,10 +168,6 @@ class MarkersMap extends Component {
                 <DropzoneComponent config={componentConfig}
                        eventHandlers={eventHandlers}
                        djsConfig={djsConfig} />
-
-                {/*<Dropzone onDrop={(e) => { this.onDrop.call(_this, e) }} multiple={false} accept="image/*">
-                  <div>Try dropping some files here, or click to select files to upload.</div>
-                </Dropzone>*/}
 
                
                 {images}
@@ -239,7 +193,6 @@ class MarkersMap extends Component {
 
         return (
             <div className="ui main container">
-                <div id="map"></div>
                 <div id="data">
                     {info}
                     {transitMap}
@@ -249,12 +202,12 @@ class MarkersMap extends Component {
     }
 }
 
-MarkersMap.defaultProps = {
-    markers: []
+Marker.defaultProps = {
+    marker: {}
 };
 
-MarkersMap.propTypes = {
-    markers: PropTypes.array,
+Marker.propTypes = {
+    marker: PropTypes.object
 };
 
-export default MarkersMap;
+export default Marker;
