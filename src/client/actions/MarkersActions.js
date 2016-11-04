@@ -31,6 +31,10 @@ class MarkersActions {
     failed(errorMessage) {
         return errorMessage;
     }
+
+    moveMap(zoom, mapCenter) {
+        return {zoom, mapCenter};
+    }
 }
 
 module.exports = alt.createActions(MarkersActions);

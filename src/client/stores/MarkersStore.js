@@ -9,12 +9,15 @@ class MarkersStore {
         this.bindListeners({
             handleFetchMarkers: MarkersActions.fetchMarkers,
             handleUpdateMarkers: MarkersActions.updateMarkers,
-            handleFailed: MarkersActions.failed
+            handleFailed: MarkersActions.failed,
+            handleMoveMap: MarkersActions.moveMap
         });
 
         this.state = {
             errorMessage: null,
-            markers: []
+            markers: [],
+            zoom: null,
+            mapCenter: null
         };
     }
 
@@ -34,6 +37,14 @@ class MarkersStore {
 
         this.setState({
             errorMessage
+        });
+    }
+
+    handleMoveMap(params) {
+        let {zoom, mapCenter} = params;
+        this.setState({
+            zoom,
+            mapCenter
         });
     }
 

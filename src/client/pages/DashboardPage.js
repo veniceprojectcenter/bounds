@@ -8,11 +8,11 @@ class DashboardPage extends Component {
     }
 
     render() {
-        let { markers } = this.props.Markers;
+        let { markers, zoom, mapCenter } = this.props.Markers;
 
         return (
             <div className="ui main container">
-                <MarkersMap markers={markers} />
+                <MarkersMap markers={markers} zoom={zoom} mapCenter={mapCenter} />
             </div>
         );
     }
@@ -20,7 +20,9 @@ class DashboardPage extends Component {
 
 DashboardPage.propTypes = {
     Markers: PropTypes.shape({
-        markers: PropTypes.array
+        markers: PropTypes.array,
+        zoom: PropTypes.number,
+        mapCenter: PropTypes.array
     })
 }
 

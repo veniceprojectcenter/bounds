@@ -13,7 +13,7 @@ class MarkersMap extends Component {
     }
 
     handleClick(marker) {
-        console.log(marker);
+        MarkersActions.moveMap(this.state.map._zoom, marker.coordinates);
         browserHistory.push('/marker/' + marker._id);
     }
 
@@ -31,7 +31,12 @@ class MarkersMap extends Component {
             "Satellite": osm2
         };
 
-        this.state.map = L.map('map', {layers: [osm], center: new L.LatLng(45.4371300, 12.3326500), zoom: 10});
+        let center = [45.4371300, 12.3326500];
+        if (this.props.mapCenter && this.props.mapCenter.length == 2) {           
+            center = this.props.mapCenter;
+        }
+
+        this.state.map = L.map('map', {layers: [osm], center: new L.LatLng(center[0], center[1]), zoom: this.props.zoom || 10});
         L.control.layers(baseMaps).addTo(this.state.map);
 
         this.drawMarkers(this.props.markers);
@@ -47,13 +52,13 @@ class MarkersMap extends Component {
         const _this = this;
 
         var greyIcon = new L.Icon({
-          iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
-          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-          iconSize: [25, 41],
-          iconAnchor: [12, 41],
-          popupAnchor: [1, -34],
-          tooltipAnchor: [1, -34],
-          shadowSize: [41, 41]
+            iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            tooltipAnchor: [1, -34],
+            shadowSize: [41, 41]
         });
 
         map.eachLayer((layer) => {
@@ -103,11 +108,15 @@ class MarkersMap extends Component {
 }
 
 MarkersMap.defaultProps = {
-    markers: []
+    markers: [],
+    zoom: null,
+    mapCenter: []
 };
 
 MarkersMap.propTypes = {
     markers: PropTypes.array,
+    zoom: PropTypes.number,
+    mapCenter: PropTypes.array
 };
 
 export default MarkersMap;
