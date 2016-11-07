@@ -17,18 +17,20 @@ exports.before = {
     //auth.restrictToAuthenticated(),
     //auth.restrictToOwner({ ownerField: '_id' })
   ],
-  create: [auth.hashPassword()],
+  create: [auth.hashPassword(), hooks.remove('isAdmin')],
   update: [
     auth.verifyToken(),
     auth.populateUser(),
     auth.restrictToAuthenticated(),
-    auth.restrictToOwner({ ownerField: '_id' })
+    auth.restrictToOwner({ ownerField: '_id' }), 
+    hooks.remove('isAdmin')
   ],
   patch: [
     auth.verifyToken(),
     auth.populateUser(),
     auth.restrictToAuthenticated(),
-    auth.restrictToOwner({ ownerField: '_id' })
+    auth.restrictToOwner({ ownerField: '_id' }),
+    hooks.remove('isAdmin')
   ],
   remove: [
     auth.verifyToken(),

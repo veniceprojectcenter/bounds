@@ -23,8 +23,11 @@ class MarkersActions {
     saveMarker(marker) {
         let _this = this;
         const markersService = Feathers.service('markers');
+
         markersService.update(marker._id, marker).then(() => {
             _this.fetchMarkers();
+        }).catch((err) => {
+            this.failed(err);
         });
     }
 

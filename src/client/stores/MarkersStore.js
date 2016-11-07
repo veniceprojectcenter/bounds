@@ -33,7 +33,7 @@ class MarkersStore {
     }
 
     handleFailed(errorMessage) {
-        console.error('blog failed', errorMessage);
+        console.error('failed', errorMessage);
 
         this.setState({
             errorMessage

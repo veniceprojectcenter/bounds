@@ -4,7 +4,7 @@ import { browserHistory } from 'react-router';
 import MarkersActions from '../actions/MarkersActions';
 import MarkersStore from '../stores/MarkersStore';
 
-import _ from 'underscore';
+import _ from 'lodash';
 
 class MarkersMap extends Component {
     constructor() {
@@ -69,8 +69,8 @@ class MarkersMap extends Component {
 
         if(markers && markers.length > 0) {
             let groups = {
-                "Present": {icon: null, f: (e) => { return e.isPresent; }},
-                "Non-present in 90s": {icon: greyIcon, f: (e) => {return !e.isPresent; }}
+                "Present": {icon: null, f: (e) => { return e.isPresentInBook; }},
+                "Non-present in 90s": {icon: greyIcon, f: (e) => {return !e.isPresentInBook; }}
             };
 
             if (this.state.markersControl) {
@@ -85,7 +85,7 @@ class MarkersMap extends Component {
                 let presentMarkers = _.filter(markers, f).map((e) => { 
                     return L.marker(e.coordinates, icon ? {icon: icon} : null)
                         .on('click', _handle.bind(_this, e))
-                        .bindTooltip("Marker #" + e.number[0], {direction: 'top'}); 
+                        .bindTooltip("Marker #" + e.number, {direction: 'top'}); 
                 });
                 
                 let presentMarkersGroup = L.layerGroup(presentMarkers);

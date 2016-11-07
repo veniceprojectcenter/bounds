@@ -4,11 +4,15 @@ import {Link} from 'react-router';
 import MarkersActions from '../actions/MarkersActions';
 import MarkersStore from '../stores/MarkersStore';
 import UploadPhoto from '../components/UploadPhoto';
+import Directions from './panels/Directions';
+import Side from './panels/Side';
+
+import Field from '../components/Field';
 
 import Select from 'react-select';
-
-// Be sure to include styles at some point, probably during your bootstrapping
 import 'react-select/dist/react-select.css';
+
+import _ from 'lodash';
 
 class Marker extends Component {
     constructor(props) {
@@ -31,14 +35,7 @@ class Marker extends Component {
     }
 
     activateSemanticUI() {
-        $('.tabular.menu .item').tab();
-    }
-
-    handleClick(marker) {
-        if (!marker.clockwiseNorthDelta) {
-            marker.clockwiseNorthDelta = 0;
-        }
-        this.setState({marker: marker, changed: false});
+        $('.vertical.menu a.item').tab();
     }
 
     saveMarker() {
@@ -46,49 +43,17 @@ class Marker extends Component {
         this.setState({changed: false});
     }
 
+    updateField(field, newValue) {
+        let newObj = _.setWith(this.state.marker, field, newValue, Object);
+        this.setState({marker: newObj, changed: true});
+        console.log(newObj);
+    }
+
     render() {
         const { marker } = this.state || {};
 
-        let transitMap;
         let saveButton;
         let _this = this;
-
-        let transit = "Not reachable";
-        if (marker.transit && marker.transit.legs && marker.transit.legs.length > 0) {
-            let totalWalk = 0;
-            let navigation = [];
-
-            marker.transit.legs[0].steps.forEach(step => {
-                navigation.push(<div> 
-                    {step.html_instructions} for {step.duration.text}
-                    <br />
-                </div>);
-                if (step.travel_mode == 'WALKING') {
-                    totalWalk += step.distance.value;
-                }
-            });
-
-            transit = (<div>
-                Time: <span>{marker.transit.legs[0].duration.text}</span><br />
-                Distance: <span>{marker.transit.legs[0].distance.text}</span><br />
-                Total Walk: <span>{totalWalk + 'm'}</span><br />
-                {navigation}
-            </div>);
-
-            const src = `https://www.google.com/maps/embed/v1/directions?key=AIzaSyCClBh_fUQeZ0XIwKLLmJpfHMsfLOkTGnk&origin=Piazzale Roma, Venice&destination=${marker.address}&mode=transit`;
-            transitMap = (
-                <iframe width="300" height="300" frameBorder="0" src={src}> </iframe>
-            );
-        }
-
-        let distanceFromPrevMaker = "";
-        let prevMarker = MarkersStore.getMarkerNumber(marker.number[0] - 1);
-        if (prevMarker && prevMarker.driving && prevMarker.driving.legs.length > 0) {
-            if (marker.driving && marker.driving.legs.length > 0) {
-                distanceFromPrevMaker = prevMarker.driving.legs[0].distance.value - marker.driving.legs[0].distance.value;
-                distanceFromPrevMaker = (<div>Distance from prev marker <span>{Math.abs(distanceFromPrevMaker)}m</span><br /></div>);
-            }  
-        }
 
         let images;
 
@@ -133,57 +98,74 @@ class Marker extends Component {
             <div className="ui main container">
                 <div id="data">
                     <div className="marker-info">
-                        <div className="marker-number">Marker #{marker.number[0]} {marker.isPresent ? "" : "(missing)"}</div>
-                        <a target="_blank" href={"http://maps.google.com/?daddr=" + marker.coordinates[0] + "," + marker.coordinates[1]}>Navigation</a><br />
-                        (also more directions below)<br />
+                        <div className="marker-number">Marker #{marker.number} {marker.isPresentInBook ? "" : "(missing)"}</div>
+                        { (marker && marker.coordinates) ? (
+                            <a target="_blank" href={"http://maps.google.com/?daddr=" + marker.coordinates[0] + "," + marker.coordinates[1]}>Navigation</a>
+                            ) : null }
 
                         {saveButton}
-
-                        <span>Clockwise rotation delta from North:</span> <input type="text" value={marker.clockwiseNorthDelta} onChange={(e) => { 
-                            let m = marker;
-                            m.clockwiseNorthDelta = e.target.value;
-                            console.log(m);
-                            _this.setState({marker: m, changed: true}); }} />
                         
-                        <br />
-                        <br />
 
-                        <div className="ui top attached tabular menu">
-                            <div className="item active" data-tab="general">General</div>
-                            { [1, 2, 3, 4].map(side => {
-                                return (
-                                    <div className="item" data-tab={'side-' + side}>Side #{side}</div>
-                                );
-                            }) }
-                            <div className="item" data-tab="photo-settings">Photo Upload & Categorization</div>
-                        </div>
+<div className="ui stackable grid">
+<div className="four wide column">
 
-                        <div className="ui bottom attached tab segment active" data-tab="general">
-                            Is Present: <span>{marker.isPresent ? "yes" : "no"}</span><br />
-                            Region: <span>{marker.otherData.localizzaz}</span><br />
+                        <div className="ui vertical fluid menu">
+  <div className="item">
+    <div className="header">General</div>
+    <div className="menu">
+      <a className="item active" data-tab="general">Main info</a>
+      <a className="item" data-tab="directions">Directions</a>
+      <a className="item" data-tab="photo-settings">Photo Upload & Categorization</a>
+    </div>
+  </div>
+  <div className="item">
+    <div className="header">Sides</div>
+    <div className="menu">
+        { [1, 2, 3, 4].map(side => {
+            return (
+                <a className="item" data-tab={'side-' + side}>Side #{side}</a>
+            );
+        }) }
+    </div>
+  </div>
+</div>
+
+</div>
+  <div className="twelve wide stretched column">
+
+                        <div className="ui tab segment active" data-tab="general">
+                            Is Present in book: <span>{marker.isPresentInBook ? "yes" : "no"}</span><br />
                             Exact Address: <span>{marker.address}</span><br />
 
-                            <h2>More directions</h2>
+                            <div className="ui form">
+                                <Field placeholder="Enter value" label="Clockwise North Delta" value={_.get(marker, 'clockwiseNorthDelta')} onChange={_this.updateField.bind(_this, 'clockwiseNorthDelta')} />
+                                <Field placeholder="Enter value" label="Spire Height" value={_.get(marker, 'spireHeight')} onChange={_this.updateField.bind(_this, 'spireHeight')} />
+                            </div>
+                        </div>
 
-                            {distanceFromPrevMaker}
-                            <br/>Transit from Piazzale Roma<br />
-                            {transit}
-
-                            {transitMap}
+                        <div className="ui tab segment" data-tab="directions">
+                            <Directions marker={marker} />
                         </div>
 
                         { [1, 2, 3, 4].map(side => {
                             return (
-                                <div className="ui bottom attached tab segment" data-tab={'side-' + side}>
-                                    Side {side}
+                                <div className="ui tab segment" data-tab={'side-' + side}>
+                                    <Side marker={marker} side={side} onChange={_this.updateField.bind(_this)} />
                                 </div>
                             );
                         }) }
 
-                        <div className="ui bottom attached tab segment" data-tab="photo-settings">
+                        <div className="ui tab segment" data-tab="photo-settings">
                             <UploadPhoto marker={marker} callback={ (e) => { _this.setState({marker: e}); }} />
                             {images}
                         </div>
+
+</div>
+</div>
+
+
+
+
                     </div>
                 </div>
             </div>

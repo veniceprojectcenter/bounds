@@ -36,7 +36,7 @@ render(
         <IndexRoute component={Dashboard}/>
         <Route path="login" component={Login} onEnter={requireNotAuth}/>
         <Route path="signup" component={Signup} onEnter={requireNotAuth}/>
-        <Route path="/marker/:id" component={Marker} onEnter={requireNotAuth}/>
+        <Route path="marker/:id" component={Marker} />
         <Route path="*" component={Dashboard}/>
     </Route>
 </Router>, document.querySelector('#app'));
