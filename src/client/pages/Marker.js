@@ -7,6 +7,7 @@ import UploadPhoto from '../components/UploadPhoto';
 import Directions from './panels/Directions';
 import Side from './panels/Side';
 import ICentoCippi from './panels/ICentoCippi';
+import ImageGallery from '../components/ImageGallery';
 
 import Field from '../components/Field';
 
@@ -137,11 +138,13 @@ class Marker extends Component {
                                 <Field placeholder="Enter value" label="Clockwise North Delta" value={_.get(marker, 'clockwiseNorthDelta')} onChange={_this.updateField.bind(_this, 'clockwiseNorthDelta')} />
                                 <Field placeholder="Enter value" label="Spire Triangle Height" value={_.get(marker, 'spireHeight')} onChange={_this.updateField.bind(_this, 'spireHeight')} />
                                 <Field placeholder="Enter value" label="Inscription" value={_.get(marker, 'inscription')} onChange={_this.updateField.bind(_this, 'inscription')} />
+                            
+                                <ImageGallery images={(marker ? marker.images : [])} typeFilter={['surroundings', 'approach']} />
                             </div>
                         </div>
 
                         <div className="ui tab segment" data-tab="i-cento">
-                            <ICentoCippi marker={marker} />
+                            <ICentoCippi marker={marker} onChange={_this.updateField.bind(_this)} />
                         </div>
 
                         <div className="ui tab segment" data-tab="directions">

@@ -13,7 +13,7 @@ class ImageGallery extends Component {
         div = _.filter(images, (e) => { return _.indexOf(typeFilter, e.type) > -1; }).map((image) => {
             let url = "http://bounds-imgs.s3-website-us-east-1.amazonaws.com/" + image.src;
             return (
-                <div className="ui small image">
+                <div className="ui medium rounded image">
                     <a href={url} target="_blank"><img src={url} height="100px" /></a>
                 </div>
             );
