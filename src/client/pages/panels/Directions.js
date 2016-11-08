@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import {Link} from 'react-router';
 
 import MarkersActions from '../../actions/MarkersActions';
 import MarkersStore from '../../stores/MarkersStore';
@@ -54,6 +53,10 @@ class Directions extends Component {
         return (
             <div>
                 <h2>More directions</h2>
+
+                { (marker && marker.coordinates) ? (
+                            <a target="_blank" href={"http://maps.google.com/?daddr=" + marker.coordinates[0] + "," + marker.coordinates[1]}>Navigation</a>
+                            ) : null }
 
                 {distanceFromPrevMaker}
                 <br/>Transit from Piazzale Roma<br />

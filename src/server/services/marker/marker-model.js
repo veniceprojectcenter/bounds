@@ -25,7 +25,8 @@ const markerSchema = new Schema({
   clockwiseNorthDelta: { type: String },
   number: { type: String, required: true },
   isPresentInBook: { type: Boolean },
-  images: {type: Array },
+  bookData: { type: Object },
+  images: { type: Array },
   otherData: { type: Object },
   driving: { type: Object },
   transit: { type: Object },
@@ -36,7 +37,8 @@ const markerSchema = new Schema({
   spireHeight: { type: String },
   hasPlatform: { type: Boolean },
   isVisited: { type: Boolean },
-  accessibility: { type: Number }
+  accessibility: { type: Number },
+  inscription: { type: String }
 });
 
 const markerModel = mongoose.model('marker', markerSchema);

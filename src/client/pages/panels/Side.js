@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
-import {Link} from 'react-router';
 
 import MarkersActions from '../../actions/MarkersActions';
 import MarkersStore from '../../stores/MarkersStore';
 import Field from '../../components/Field';
+import ImageGallery from '../../components/ImageGallery';
 
 import _ from 'lodash';
 
@@ -34,9 +34,7 @@ class Side extends Component {
                 <Field placeholder="Enter value" label="Height (in cm)" value={_.get(marker, 'sides.' + side + '.spireSize.height')} onChange={onChange.bind(null, 'sides.' + side + '.spireSize.height')} />
                 <Field placeholder="Enter value" label="Width (in cm)" value={_.get(marker, 'sides.' + side + '.spireSize.width')} onChange={onChange.bind(null, 'sides.' + side + '.spireSize.width')} />
 
-                <div className="ui small image">
-                    <img src="/images/wireframe/image.png" />
-                </div>
+                <ImageGallery images={(marker ? marker.images : [])} typeFilter={['side-' + side]} />
             </div>
         );
     }

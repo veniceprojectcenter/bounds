@@ -6,6 +6,7 @@ import MarkersStore from '../stores/MarkersStore';
 import UploadPhoto from '../components/UploadPhoto';
 import Directions from './panels/Directions';
 import Side from './panels/Side';
+import ICentoCippi from './panels/ICentoCippi';
 
 import Field from '../components/Field';
 
@@ -46,7 +47,6 @@ class Marker extends Component {
     updateField(field, newValue) {
         let newObj = _.setWith(this.state.marker, field, newValue, Object);
         this.setState({marker: newObj, changed: true});
-        console.log(newObj);
     }
 
     render() {
@@ -78,9 +78,7 @@ class Marker extends Component {
                     <div>
                         <a href={url} target="_blank"><img src={url} height="100px" /></a>
                         Side: <Select value={(img && img.type)} options={options} onChange={(e) => { 
-                            let marker = this.state.marker; 
-                            marker.images[i].type = e.value; 
-                            this.setState({marker: marker, changed: true}); }} />
+                            _this.updateField('images.' + i + '.type', e.value); }} />
                     </div>
                 );
             });
@@ -99,9 +97,6 @@ class Marker extends Component {
                 <div id="data">
                     <div className="marker-info">
                         <div className="marker-number">Marker #{marker.number} {marker.isPresentInBook ? "" : "(missing)"}</div>
-                        { (marker && marker.coordinates) ? (
-                            <a target="_blank" href={"http://maps.google.com/?daddr=" + marker.coordinates[0] + "," + marker.coordinates[1]}>Navigation</a>
-                            ) : null }
 
                         {saveButton}
                         
@@ -114,6 +109,7 @@ class Marker extends Component {
     <div className="header">General</div>
     <div className="menu">
       <a className="item active" data-tab="general">Main info</a>
+      <a className="item" data-tab="i-cento">Data from I Cento Cippi</a>
       <a className="item" data-tab="directions">Directions</a>
       <a className="item" data-tab="photo-settings">Photo Upload & Categorization</a>
     </div>
@@ -139,8 +135,13 @@ class Marker extends Component {
 
                             <div className="ui form">
                                 <Field placeholder="Enter value" label="Clockwise North Delta" value={_.get(marker, 'clockwiseNorthDelta')} onChange={_this.updateField.bind(_this, 'clockwiseNorthDelta')} />
-                                <Field placeholder="Enter value" label="Spire Height" value={_.get(marker, 'spireHeight')} onChange={_this.updateField.bind(_this, 'spireHeight')} />
+                                <Field placeholder="Enter value" label="Spire Triangle Height" value={_.get(marker, 'spireHeight')} onChange={_this.updateField.bind(_this, 'spireHeight')} />
+                                <Field placeholder="Enter value" label="Inscription" value={_.get(marker, 'inscription')} onChange={_this.updateField.bind(_this, 'inscription')} />
                             </div>
+                        </div>
+
+                        <div className="ui tab segment" data-tab="i-cento">
+                            <ICentoCippi marker={marker} />
                         </div>
 
                         <div className="ui tab segment" data-tab="directions">
