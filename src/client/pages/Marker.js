@@ -64,7 +64,7 @@ class Marker extends Component {
             { value: 'side-2', label: 'Side #2' },
             { value: 'side-3', label: 'Side #3' },
             { value: 'side-4', label: 'Side #4' },
-            //{ value: 5, label: 'Top' },
+            { value: 'inscription', label: 'Inscription close-up' },
             { value: 'surroundings', label: 'Surrounding area' },
             { value: 'approach', label: 'Approach photo' },
             { value: 'old-photo', label: 'Old photo' },
