@@ -2,21 +2,15 @@
 
 const globalHooks = require('../../../hooks');
 const hooks = require('feathers-hooks');
-
-const isAdmin = (hook) => {
-  if(!hook.params.user || !hook.params.user.isAdmin) {
-    throw new Error('You need to be a logged-in admin!');
-  }
-}
-
+const isAdmin = require('../../isAdmin');
 
 exports.before = {
   all: [],
   find: [],
-  get: [isAdmin],
+  get: [],
   create: [isAdmin],
   update: [isAdmin],
-  patch: [isAdmin],
+  patch: [hooks.disable('external')],
   remove: [isAdmin]
 };
 

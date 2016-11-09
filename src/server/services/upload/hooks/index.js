@@ -49,9 +49,9 @@ exports.after = {
           images = [{src: hook.result.id}];
         }
 
-        marker.images = images;
+        let res = {images: images};
 
-        return markers.update(marker_id, marker).then(e => {
+        return markers.patch(marker_id, res).then(e => {
           hook.result.marker = e;
           return hook;
         });
