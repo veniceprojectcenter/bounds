@@ -11,7 +11,6 @@ exports.before = {
   find: [],
   get: [],
   create: [
-    isAdmin,
     function(hook) {
         if (!hook.data.uri && hook.params.file){
             const file = hook.params.file;
