@@ -2,8 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import DropzoneComponent from 'react-dropzone-component';
 import ReactDOMServer from 'react-dom/server';
 import {URL} from '../lib/Constants';
-import Feathers from '../lib/Feathers';
-
 
 class UploadPhoto extends Component {
     constructor() {
@@ -32,8 +30,6 @@ class UploadPhoto extends Component {
         let response = JSON.parse(res.xhr.response);
         let id = response && response.id;
 
-        console.log(res);
-
         this.setState({progress: null});
         
         if (this.props.callback) {
@@ -56,12 +52,12 @@ class UploadPhoto extends Component {
         };
 
         var eventHandlers = { 
-            complete: this.uploadFinished.bind(this)
+            complete: this.uploadFinished.bind(this),
+            uploadprogress: (e, a) => { _this.setState({progress: Math.round(a)}) } 
         };
 
         var djsConfig = {
             addRemoveLinks: true,
-            headers: { Authorization: 'Bearer ' + Feathers.get('token') },
             paramName: "uri",
             uploadMultiple: false,
             previewTemplate: ReactDOMServer.renderToStaticMarkup(<div>.</div>)
