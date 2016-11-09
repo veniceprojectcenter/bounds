@@ -26,17 +26,20 @@ class UploadPhoto extends Component {
 
     uploadFinished(res) {
         let {marker} = this.state;
-
         let response = JSON.parse(res.xhr.response);
-        let id = response && response.id;
 
         this.setState({progress: null});
+        
+        if (res.status == "error") {
+            alert('error -- ' + response.message);
+            return;
+        }
+
+        let id = response && response.id;
         
         if (this.props.callback) {
             this.props.callback(response.marker);
         }
-
-        alert('done :)');
     }
 
     render() {

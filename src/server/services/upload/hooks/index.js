@@ -3,12 +3,15 @@
 const globalHooks = require('../../../hooks');
 const hooks = require('feathers-hooks');
 const dauria = require('dauria');
+const isAdmin = require('../../isAdmin');
+
 
 exports.before = {
   all: [],
   find: [],
   get: [],
   create: [
+    isAdmin,
     function(hook) {
         if (!hook.data.uri && hook.params.file){
             const file = hook.params.file;
@@ -21,9 +24,9 @@ exports.before = {
       hook.params.s3 = { ACL: 'public-read' }; // makes uploaded files public
     }
   ],
-  update: [],
-  patch: [],
-  remove: []
+  update: [isAdmin],
+  patch: [isAdmin],
+  remove: [isAdmin]
 };
 
 exports.after = {

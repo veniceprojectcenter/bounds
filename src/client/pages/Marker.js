@@ -72,7 +72,6 @@ class Marker extends Component {
             { value: 'other', label: 'Other' }
         ];
 
-        console.log(marker);
         if (marker.images && marker.images.length > 0) {
             images = marker.images.map((img, i) => {
                 let url = "http://bounds-imgs.s3-website-us-east-1.amazonaws.com/" + (img && img.src);
@@ -161,7 +160,7 @@ class Marker extends Component {
                         }) }
 
                         <div className="ui tab segment" data-tab="photo-settings">
-                            <UploadPhoto marker={marker} callback={ (e) => { if (e) { _this.setState({marker: e}); } }} />
+                            <UploadPhoto marker={marker} callback={ (ma) => { if (ma) { console.log('asd', ma); _this.setState({marker: ma}); } }} />
                             {images}
                         </div>
 

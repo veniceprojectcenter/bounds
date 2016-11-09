@@ -2,7 +2,7 @@ import './index.scss';
 
 import React from 'react';
 import {render} from 'react-dom';
-import {Router, Route, browserHistory, IndexRoute} from 'react-router';
+import {Router, Route, hashHistory, IndexRoute} from 'react-router';
 
 import AppStore from './stores/AppStore';
 
@@ -31,7 +31,7 @@ let requireNotAuth = function(nextState, replace) {
 }
 
 render(
-    <Router history={browserHistory}>
+    <Router history={hashHistory}>
     <Route path="/" component={App}>
         <IndexRoute component={Dashboard}/>
         <Route path="login" component={Login} onEnter={requireNotAuth}/>

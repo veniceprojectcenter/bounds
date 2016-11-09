@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { browserHistory } from 'react-router';
+import { hashHistory } from 'react-router';
 
 import MarkersActions from '../actions/MarkersActions';
 import MarkersStore from '../stores/MarkersStore';
@@ -14,7 +14,7 @@ class MarkersMap extends Component {
 
     handleClick(marker) {
         MarkersActions.moveMap(this.state.map._zoom, marker.coordinates);
-        browserHistory.push('/marker/' + marker._id);
+        hashHistory.push('/marker/' + marker._id);
     }
 
     componentDidMount() {
