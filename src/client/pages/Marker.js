@@ -138,11 +138,12 @@ class Marker extends Component {
 
                         <div className="ui tab segment active" data-tab="general">
                             Is Present in book: <span>{marker.isPresentInBook ? "yes" : "no"}</span><br />
+                            Coordinates: <span>{_.round(_.get(marker, 'coordinates.0'), 6)}, {_.round(_.get(marker, 'coordinates.1'), 6)}</span><br />
                             Exact Address: <span>{marker.address}</span><br />
 
                             <br /><br /><br />
 
-                            Visitation status: <Dropdown options={visitedOptions} value={_.get(marker, 'visitedOptions')} onChange={_this.updateField.bind(_this, 'visitedOptions')} />
+                            Visitation status: <Dropdown options={visitedOptions} value={_.get(marker, 'visitedStatus')} onChange={_this.updateField.bind(_this, 'visitedStatus')} />
                             
                             <br /><br />
 
@@ -151,7 +152,7 @@ class Marker extends Component {
                                 <Field placeholder="Enter value" label="Spire Triangle Height" value={_.get(marker, 'spireHeight')} onChange={_this.updateField.bind(_this, 'spireHeight')} />
                                 <Field placeholder="Enter value" label="Inscription" value={_.get(marker, 'inscription')} onChange={_this.updateField.bind(_this, 'inscription')} />
                             
-                                <ImageGallery images={(marker ? marker.images : [])} typeFilter={['surroundings', 'approach']} />
+                                <ImageGallery images={(marker ? marker.images : [])} typeFilter={['surroundings', 'approach', 'inscription']} />
                             </div>
                         </div>
 
