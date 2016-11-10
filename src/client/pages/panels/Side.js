@@ -5,7 +5,18 @@ import MarkersStore from '../../stores/MarkersStore';
 import Field from '../../components/Field';
 import ImageGallery from '../../components/ImageGallery';
 
+import Dropdown from '../../components/Dropdown';
+
 import _ from 'lodash';
+
+var conditionOptions = [
+    { value: null, label: '<Pick status>' },
+    { value: 1, label: '1 - Excellent' },
+    { value: 2, label: '2 - Good' },
+    { value: 3, label: '3 - Average' },
+    { value: 4, label: '4 - Fair' },
+    { value: 5, label: '5 - Poor' }
+];
 
 class Side extends Component {
     constructor() {
@@ -15,24 +26,55 @@ class Side extends Component {
     render() {
         const { side, marker, onChange } = this.props || {};
 
+        let vals = _.get(marker, 'sides.' + side + '.conditions', {});
+        let length = Object.keys(vals).length || 1;
+        let averageScale = _.sum(Object.keys(vals).map(e => vals[e])) / length;
+
         return (
-            <div className="ui form">
+            <div>
                 <h3>Side #{side}</h3>
+
+                <h3>Condition</h3>
+
+                Biological growth on marker: <Dropdown options={conditionOptions} value={_.get(marker, 'sides.' + side + '.conditions.growthOn')} onChange={onChange.bind(null, 'sides.' + side + '.conditions.growthOn')} />
+                <br />
+
+                Biological growth around marker: <Dropdown options={conditionOptions} value={_.get(marker, 'sides.' + side + '.conditions.growthAround')} onChange={onChange.bind(null, 'sides.' + side + '.conditions.growthAround')} />
+                <br />
+
+                Surface cracking: <Dropdown options={conditionOptions} value={_.get(marker, 'sides.' + side + '.conditions.surfaceCracking')} onChange={onChange.bind(null, 'sides.' + side + '.conditions.surfaceCracking')} />
+                <br />
+
+                Environmental discoloration: <Dropdown options={conditionOptions} value={_.get(marker, 'sides.' + side + '.conditions.discoloration')} onChange={onChange.bind(null, 'sides.' + side + '.conditions.discoloration')} />
+                <br />
+
+                Structural disintegration: <Dropdown options={conditionOptions} value={_.get(marker, 'sides.' + side + '.conditions.structuralDisintegration')} onChange={onChange.bind(null, 'sides.' + side + '.conditions.structuralDisintegration')} />
+                <br />
+                <br />
+                <br />
+
+                Overall condition: { averageScale }
 
                 <h3>Base</h3>
 
-                <Field placeholder="Enter value" label="Height (in cm)" value={_.get(marker, 'sides.' + side + '.baseSize.height')} onChange={onChange.bind(null, 'sides.' + side + '.baseSize.height')} />
-                <Field placeholder="Enter value" label="Width (in cm)" value={_.get(marker, 'sides.' + side + '.baseSize.width')} onChange={onChange.bind(null, 'sides.' + side + '.baseSize.width')} />
+                <div className="ui form">
+                    <Field placeholder="Enter value" label="Height (in cm)" value={_.get(marker, 'sides.' + side + '.baseSize.height')} onChange={onChange.bind(null, 'sides.' + side + '.baseSize.height')} />
+                    <Field placeholder="Enter value" label="Width (in cm)" value={_.get(marker, 'sides.' + side + '.baseSize.width')} onChange={onChange.bind(null, 'sides.' + side + '.baseSize.width')} />
+                </div>
 
                 <h3>Ring</h3>
 
-                <Field placeholder="Enter value" label="Height (in cm)" value={_.get(marker, 'sides.' + side + '.ringSize.height')} onChange={onChange.bind(null, 'sides.' + side + '.ringSize.height')} />
-                <Field placeholder="Enter value" label="Width (in cm)" value={_.get(marker, 'sides.' + side + '.ringSize.width')} onChange={onChange.bind(null, 'sides.' + side + '.ringSize.width')} />
+                <div className="ui form">
+                    <Field placeholder="Enter value" label="Height (in cm)" value={_.get(marker, 'sides.' + side + '.ringSize.height')} onChange={onChange.bind(null, 'sides.' + side + '.ringSize.height')} />
+                    <Field placeholder="Enter value" label="Width (in cm)" value={_.get(marker, 'sides.' + side + '.ringSize.width')} onChange={onChange.bind(null, 'sides.' + side + '.ringSize.width')} />
+                </div>
 
                 <h3>Spire</h3>
 
-                <Field placeholder="Enter value" label="Height (in cm)" value={_.get(marker, 'sides.' + side + '.spireSize.height')} onChange={onChange.bind(null, 'sides.' + side + '.spireSize.height')} />
-                <Field placeholder="Enter value" label="Width (in cm)" value={_.get(marker, 'sides.' + side + '.spireSize.width')} onChange={onChange.bind(null, 'sides.' + side + '.spireSize.width')} />
+                <div className="ui form">
+                    <Field placeholder="Enter value" label="Height (in cm)" value={_.get(marker, 'sides.' + side + '.spireSize.height')} onChange={onChange.bind(null, 'sides.' + side + '.spireSize.height')} />
+                    <Field placeholder="Enter value" label="Width (in cm)" value={_.get(marker, 'sides.' + side + '.spireSize.width')} onChange={onChange.bind(null, 'sides.' + side + '.spireSize.width')} />
+                </div>
 
                 <ImageGallery images={(marker ? marker.images : [])} typeFilter={['side-' + side]} />
             </div>

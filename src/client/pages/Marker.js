@@ -10,11 +10,31 @@ import ICentoCippi from './panels/ICentoCippi';
 import ImageGallery from '../components/ImageGallery';
 
 import Field from '../components/Field';
-
-import Select from 'react-select';
-import 'react-select/dist/react-select.css';
+import Dropdown from '../components/Dropdown';
 
 import _ from 'lodash';
+
+var photoOptions = [
+    { value: 0, label: '<Pick type/side>' },
+    { value: 'side-1', label: 'Front face side #1' },
+    { value: 'side-2', label: 'Side #2' },
+    { value: 'side-3', label: 'Side #3' },
+    { value: 'side-4', label: 'Side #4' },
+    { value: 'inscription', label: 'Inscription close-up' },
+    { value: 'surroundings', label: 'Surrounding area' },
+    { value: 'approach', label: 'Approach photo' },
+    { value: 'old-photo', label: 'Old photo' },
+    { value: 'old-map', label: 'Old map' },
+    { value: 'other', label: 'Other' }
+];
+
+var visitedOptions = [
+    { value: 0, label: '<Pick status>' },
+    { value: 'reached', label: 'Reached' },
+    { value: 'unreachable', label: 'Existing, but unreachable' },
+    { value: 'unsure', label: 'Unreachable, unknown' },
+    { value: 'missing', label: 'Confirmed, missing' }
+];
 
 class Marker extends Component {
     constructor(props) {
@@ -58,28 +78,14 @@ class Marker extends Component {
 
         let images;
 
-        var options = [
-            { value: 0, label: '<Pick type/side>' },
-            { value: 'side-1', label: 'Front face side #1' },
-            { value: 'side-2', label: 'Side #2' },
-            { value: 'side-3', label: 'Side #3' },
-            { value: 'side-4', label: 'Side #4' },
-            { value: 'inscription', label: 'Inscription close-up' },
-            { value: 'surroundings', label: 'Surrounding area' },
-            { value: 'approach', label: 'Approach photo' },
-            { value: 'old-photo', label: 'Old photo' },
-            { value: 'old-map', label: 'Old map' },
-            { value: 'other', label: 'Other' }
-        ];
-
         if (marker.images && marker.images.length > 0) {
             images = marker.images.map((img, i) => {
                 let url = "http://bounds-imgs.s3-website-us-east-1.amazonaws.com/" + (img && img.src);
                 return (
                     <div>
                         <a href={url} target="_blank"><img src={url} height="100px" /></a>
-                        Side: <Select value={(img && img.type)} options={options} onChange={(e) => { 
-                            _this.updateField('images.' + i + '.type', e.value); }} />
+                        Side: <Dropdown value={(img && img.type)} options={photoOptions} onChange={_this.updateField.bind(_this, 'images.' + i + '.type')} />
+                            
                     </div>
                 );
             });
@@ -133,6 +139,12 @@ class Marker extends Component {
                         <div className="ui tab segment active" data-tab="general">
                             Is Present in book: <span>{marker.isPresentInBook ? "yes" : "no"}</span><br />
                             Exact Address: <span>{marker.address}</span><br />
+
+                            <br /><br /><br />
+
+                            Visitation status: <Dropdown options={visitedOptions} value={_.get(marker, 'visitedOptions')} onChange={_this.updateField.bind(_this, 'visitedOptions')} />
+                            
+                            <br /><br />
 
                             <div className="ui form">
                                 <Field placeholder="Enter value" label="Clockwise North Delta" value={_.get(marker, 'clockwiseNorthDelta')} onChange={_this.updateField.bind(_this, 'clockwiseNorthDelta')} />

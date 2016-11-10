@@ -38,7 +38,8 @@ const markerSchema = new Schema({
   hasPlatform: { type: Boolean },
   isVisited: { type: Boolean },
   accessibility: { type: Number },
-  inscription: { type: String }
+  inscription: { type: String },
+  visitedStatus: { type: String }
 });
 
 const markerModel = mongoose.model('marker', markerSchema);
