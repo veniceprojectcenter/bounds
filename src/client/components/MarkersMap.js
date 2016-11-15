@@ -1,8 +1,13 @@
 import React, { Component, PropTypes } from 'react';
-import { hashHistory } from 'react-router';
+import { hashHistory, Link } from 'react-router';
+import ReactDOMServer from 'react-dom/server';
 
 import MarkersActions from '../actions/MarkersActions';
 import MarkersStore from '../stores/MarkersStore';
+import { IMAGES_URL } from '../lib/Constants';
+
+import 'leaflet-draw';
+import 'leaflet-draw/dist/leaflet.draw.css';
 
 import _ from 'lodash';
 
@@ -13,11 +18,14 @@ class MarkersMap extends Component {
     }
 
     handleClick(marker) {
+        console.log('asdas');
         MarkersActions.moveMap(this.state.map._zoom, marker.coordinates);
         hashHistory.push('/marker/' + marker._id);
     }
 
     componentDidMount() {
+        var _this = this;
+
         var osmUrl = 'https://api.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}@2x.png?access_token=pk.eyJ1IjoiZG12b3VsZGplZmYiLCJhIjoiY2l1MzBxMjYzMGlqMzMwandnajM2MjF2bCJ9.GhXYtRS36ehGO941Ro0llA',
             osmAttrib = '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
             osm = L.tileLayer(osmUrl, {maxZoom: 18, attribution: osmAttrib});
@@ -36,8 +44,58 @@ class MarkersMap extends Component {
             center = this.props.mapCenter;
         }
 
-        this.state.map = L.map('map', {layers: [osm], center: new L.LatLng(center[0], center[1]), zoom: this.props.zoom || 10});
-        L.control.layers(baseMaps).addTo(this.state.map);
+        var map = L.map('map', {layers: [osm], center: new L.LatLng(center[0], center[1]), zoom: this.props.zoom || 10});
+        L.control.layers(baseMaps).addTo(map);
+
+        var drawnItems = new L.FeatureGroup();
+
+        this.setState({map: map, drawnItems: drawnItems});
+
+        var drawControl = new L.Control.Draw({
+            draw: {
+                position: 'topleft',
+                polygon: {
+                    title: 'Draw a sexy polygon!',
+                    allowIntersection: false,
+                    drawError: {
+                        color: 'red',
+                        timeout: 1000
+                    },
+                    shapeOptions: {
+                        color: 'red'
+                    },
+                    showArea: true
+                },
+                circle: false,
+                marker: false,
+                rectangle: false,
+                polyline: false
+            }
+        });
+        //map.addControl(drawControl);
+
+        map.on('draw:drawstart', (e) => {
+            let i = _this.state.drawnItems;
+            i.eachLayer((layer) => {
+                if(!layer._url) {
+                    i.removeLayer(layer);
+                }
+            });
+        });
+
+        map.on('draw:created', (e) => {
+            var type = e.layerType,
+                layer = e.layer;
+
+            if (type === 'polygon') {
+                var points = layer._latlngs;
+                var geojson = layer.toGeoJSON();
+
+                console.log(geojson);
+            }
+
+            _this.state.drawnItems.addLayer(layer);
+        });
 
         this.drawMarkers(this.props.markers);
     }
@@ -47,9 +105,11 @@ class MarkersMap extends Component {
     }
 
     drawMarkers(markers) {
-        let { map } = this.state;
+        let { map, drawnItems } = this.state;
         let _handle = this.handleClick;
         const _this = this;
+
+        if (!map) { return; }
 
         var greyIcon = new L.Icon({
             iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
@@ -67,6 +127,10 @@ class MarkersMap extends Component {
             }
         });
 
+        if (drawnItems) {
+            map.addLayer(drawnItems);
+        }
+
         if(markers && markers.length > 0) {
             let groups = {
                 "Present": {icon: null, f: (e) => { return e.isPresentInBook; }},
@@ -82,10 +146,30 @@ class MarkersMap extends Component {
             Object.keys(groups).forEach((key) => {
                 let { f, icon } = groups[key];
 
-                let presentMarkers = _.filter(markers, f).map((e) => { 
-                    return L.marker(e.coordinates, icon ? {icon: icon} : null)
-                        .on('click', _handle.bind(_this, e))
-                        .bindTooltip("Marker #" + e.number, {direction: 'top'}); 
+                let presentMarkers = _.filter(markers, f).map((marker) => { 
+
+                    let faceImageDiv;
+                    let faceImage = _.filter(marker.images, (image) => { return image.type == 'side-1'; });
+                    if (faceImage.length > 0) {
+                        faceImageDiv = (
+                            <img src={IMAGES_URL + faceImage[0].src} height="100px" />
+                        );
+                    }
+
+                    let popupBody = ReactDOMServer.renderToStaticMarkup(
+                        <div className="marker-popup">
+                            Marker #{marker.number}
+                            <br />
+
+                            {faceImageDiv}
+                            <br />
+                            <a href={`#/marker/${marker._id}`}>See more...</a>
+                        </div>
+                    );
+
+                    return L.marker(marker.coordinates, icon ? {icon: icon} : null)
+                        .bindPopup(popupBody)
+                        .bindTooltip("Marker #" + marker.number, {direction: 'top'}); 
                 });
                 
                 let presentMarkersGroup = L.layerGroup(presentMarkers);

@@ -84,8 +84,7 @@ class Marker extends Component {
                 return (
                     <div>
                         <a href={url} target="_blank"><img src={url} height="100px" /></a>
-                        Side: <Dropdown value={(img && img.type)} options={photoOptions} onChange={_this.updateField.bind(_this, 'images.' + i + '.type')} />
-                            
+                        Side: <Dropdown value={(img && img.type)} options={photoOptions} onChange={_this.updateField.bind(_this, 'images.' + i + '.type')} />    
                     </div>
                 );
             });
@@ -100,42 +99,38 @@ class Marker extends Component {
         }
 
         return (
-            <div className="ui main container">
-                <div id="data">
-                    <div className="marker-info">
-                        <div className="marker-number">Marker #{marker.number} {marker.isPresentInBook ? "" : "(missing)"}</div>
+            <div className="ui main container marker-info">
+                <div className="marker-number">Marker #{marker.number} {marker.isPresentInBook ? "" : "(missing)"}</div>
 
-                        {saveButton}
-                        
+                {saveButton}
+                
 
-<div className="ui stackable grid">
-<div className="four wide column">
-
+                <div className="ui stackable grid">
+                    <div className="four wide column">
                         <div className="ui vertical fluid menu">
-  <div className="item">
-    <div className="header">General</div>
-    <div className="menu">
-      <a className="item active" data-tab="general">Main info</a>
-      <a className="item" data-tab="i-cento">Data from I Cento Cippi</a>
-      <a className="item" data-tab="directions">Directions</a>
-      <a className="item" data-tab="photo-settings">Photo Upload & Categorization</a>
-    </div>
-  </div>
-  <div className="item">
-    <div className="header">Sides</div>
-    <div className="menu">
-        { [1, 2, 3, 4].map(side => {
-            return (
-                <a className="item" data-tab={'side-' + side}>Side #{side}</a>
-            );
-        }) }
-    </div>
-  </div>
-</div>
+                            <div className="item">
+                                <div className="header">General</div>
+                                <div className="menu">
+                                    <a className="item active" data-tab="general">Main info</a>
+                                    <a className="item" data-tab="i-cento">Data from I Cento Cippi</a>
+                                    <a className="item" data-tab="directions">Directions</a>
+                                    <a className="item" data-tab="photo-settings">Photo Upload & Categorization</a>
+                                </div>
+                            </div>
+                            <div className="item">
+                                <div className="header">Sides</div>
+                                <div className="menu">
+                                    { [1, 2, 3, 4].map(side => {
+                                        return (
+                                            <a className="item" data-tab={'side-' + side}>Side #{side}</a>
+                                        );
+                                    }) }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-</div>
-  <div className="twelve wide stretched column">
-
+                    <div className="twelve wide stretched column">
                         <div className="ui tab segment active" data-tab="general">
                             Is Present in book: <span>{marker.isPresentInBook ? "yes" : "no"}</span><br />
                             Coordinates: <span>{_.round(_.get(marker, 'coordinates.0'), 6)}, {_.round(_.get(marker, 'coordinates.1'), 6)}</span><br />
@@ -173,15 +168,9 @@ class Marker extends Component {
                         }) }
 
                         <div className="ui tab segment" data-tab="photo-settings">
-                            <UploadPhoto marker={marker} callback={ (ma) => { if (ma) { console.log('asd', ma); _this.setState({marker: ma}); } }} />
+                            <UploadPhoto marker={marker} callback={ (ma) => { if (ma) { _this.setState({marker: ma}); } }} />
                             {images}
                         </div>
-
-</div>
-</div>
-
-
-
 
                     </div>
                 </div>

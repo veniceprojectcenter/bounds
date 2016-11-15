@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { IMAGES_URL } from '../lib/Constants';
 import _ from 'lodash';
 
 class ImageGallery extends Component {
@@ -11,7 +12,7 @@ class ImageGallery extends Component {
 
         let div;
         div = _.filter(images, (e) => { return _.indexOf(typeFilter, e.type) > -1; }).map((image) => {
-            let url = "http://bounds-imgs.s3-website-us-east-1.amazonaws.com/" + image.src;
+            let url = IMAGES_URL + image.src;
             return (
                 <div className="ui medium rounded image">
                     <a href={url} target="_blank"><img src={url} height="100px" /></a>
