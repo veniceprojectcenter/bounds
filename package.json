@@ -50,6 +50,7 @@
     "feathers-rest": "^1.5.0",
     "feathers-socketio": "^1.4.1",
     "fs-blob-store": "^5.2.1",
+    "leaflet": "^1.0.1",
     "leaflet-draw": "^0.4.3",
     "lockr": "^0.8.4",
     "lodash": "^4.16.6",

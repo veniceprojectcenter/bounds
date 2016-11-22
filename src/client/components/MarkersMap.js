@@ -23,6 +23,29 @@ class MarkersMap extends Component {
         hashHistory.push('/marker/' + marker._id);
     }
 
+    handlePolygonDrawStarted(e) {
+        let i = this.state.drawnItems;
+        i.eachLayer((layer) => {
+            if(!layer._url) {
+                i.removeLayer(layer);
+            }
+        });
+    }
+
+    handlePolygonCreated(e) {
+        var type = e.layerType,
+            layer = e.layer;
+
+        if (type === 'polygon') {
+            var points = layer._latlngs;
+            var geojson = layer.toGeoJSON();
+
+            console.log(geojson);
+        }
+
+        this.state.drawnItems.addLayer(layer);
+    }
+
     componentDidMount() {
         var _this = this;
 
@@ -45,7 +68,7 @@ class MarkersMap extends Component {
         }
 
         var map = L.map('map', {layers: [osm], center: new L.LatLng(center[0], center[1]), zoom: this.props.zoom || 10});
-        L.control.layers(baseMaps).addTo(map);
+        L.control.layers(baseMaps, null, {collapsed: false}).addTo(map);
 
         var drawnItems = new L.FeatureGroup();
 
@@ -55,7 +78,7 @@ class MarkersMap extends Component {
             draw: {
                 position: 'topleft',
                 polygon: {
-                    title: 'Draw a sexy polygon!',
+                    title: 'Draw a polygon!',
                     allowIntersection: false,
                     drawError: {
                         color: 'red',
@@ -72,30 +95,11 @@ class MarkersMap extends Component {
                 polyline: false
             }
         });
-        //map.addControl(drawControl);
 
-        map.on('draw:drawstart', (e) => {
-            let i = _this.state.drawnItems;
-            i.eachLayer((layer) => {
-                if(!layer._url) {
-                    i.removeLayer(layer);
-                }
-            });
-        });
+        map.addControl(drawControl);
 
-        map.on('draw:created', (e) => {
-            var type = e.layerType,
-                layer = e.layer;
-
-            if (type === 'polygon') {
-                var points = layer._latlngs;
-                var geojson = layer.toGeoJSON();
-
-                console.log(geojson);
-            }
-
-            _this.state.drawnItems.addLayer(layer);
-        });
+        map.on('draw:drawstart', this.handlePolygonDrawStarted.bind(this));
+        map.on('draw:created', this.handlePolygonCreated.bind(this));
 
         this.drawMarkers(this.props.markers);
     }
