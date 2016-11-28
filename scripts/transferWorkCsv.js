@@ -1,6 +1,6 @@
 var request = require("request");
 
-var SKIP = ["CODASC", "REGIONE", "CODPRO", "PROVINCIA", "CODCOM", "COMUNE", "PROCOM", "SEZ2011", "NSEZ", "ACE", "CODLOC", "CODASC", "CODREG"];
+var SKIP = ["TIPO_SOGGETTO", "CODREG", "REGIONE", "CODPRO", "PROVINCIA", "CODCOM", "COMUNE", "PROCOM", "SEZ2011", "NSEZ", "ACE", "CODLOC", "CODASC"];
 
 if (process.argv.length != 3) {
 	console.log('No file specified.');
@@ -13,7 +13,7 @@ var parse = require('csv-parse/lib/sync');
 
 
 var csvDoc = fs.readFileSync(process.argv[2], 'utf8');
-var records = parse(csvDoc, {columns: true, delimiter: ';'});
+var records = parse(csvDoc, {columns: true});
 
 var cache = {};
 
@@ -33,19 +33,19 @@ MongoClient.connect(mongoUrl, function(err, db) {
   collection.find({}).toArray(function(err, docs) {
     if (err) { console.log(err); return; }
     docs.forEach(function(elem) {
-      var census = cache[elem.sez2011] || {};
+      var workData = cache[elem.sez2011] || {};
 
-      if (Object.keys(census).length == 0) { return; }
+      if (Object.keys(workData).length == 0) { return; }
 
-      var censusObj = {};
+      var workObj = {};
 
-      Object.keys(census).forEach(function(key) {
+      Object.keys(workData).forEach(function(key) {
         if (SKIP.indexOf(key) == -1) {
-          censusObj[key] = parseInt(census[key]);
+          workObj[key] = parseInt(workData[key]);
         }
       });
 
-      processTract(elem._id, censusObj, census.COMUNE, collection);
+      processTract(elem._id, workObj, collection);
     });
 
     //db.close();
@@ -53,11 +53,11 @@ MongoClient.connect(mongoUrl, function(err, db) {
 });
 
 var q = 0;
-function processTract(id, census, comune, collection) {
+function processTract(id, workData, collection) {
 	var m = q;
 	q += 1;
 
-  collection.updateOne({_id: id}, { $set: {census: census, comune: comune}}, function(err, res) {
+  collection.updateOne({_id: id}, { $set: {work: workData}}, function(err, res) {
   	console.log(m);
   });
 }

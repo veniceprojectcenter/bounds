@@ -18,7 +18,6 @@ class MarkersMap extends Component {
     }
 
     handleClick(marker) {
-        console.log('asdas');
         MarkersActions.moveMap(this.state.map._zoom, marker.coordinates);
         hashHistory.push('/marker/' + marker._id);
     }
@@ -33,6 +32,8 @@ class MarkersMap extends Component {
     }
 
     handlePolygonCreated(e) {
+        let { onRegionSelect } = this.props;
+
         var type = e.layerType,
             layer = e.layer;
 
@@ -40,7 +41,9 @@ class MarkersMap extends Component {
             var points = layer._latlngs;
             var geojson = layer.toGeoJSON();
 
-            console.log(geojson);
+            if (onRegionSelect) { 
+                onRegionSelect(geojson.geometry);
+            }
         }
 
         this.state.drawnItems.addLayer(layer);
@@ -198,13 +201,15 @@ class MarkersMap extends Component {
 MarkersMap.defaultProps = {
     markers: [],
     zoom: null,
-    mapCenter: []
+    mapCenter: [],
+    onRegionSelect: null
 };
 
 MarkersMap.propTypes = {
     markers: PropTypes.array,
     zoom: PropTypes.number,
-    mapCenter: PropTypes.array
+    mapCenter: PropTypes.array,
+    onRegionSelect: PropTypes.func
 };
 
 export default MarkersMap;
