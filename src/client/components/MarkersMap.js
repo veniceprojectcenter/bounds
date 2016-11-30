@@ -5,6 +5,8 @@ import ReactDOMServer from 'react-dom/server';
 import MarkersActions from '../actions/MarkersActions';
 import MarkersStore from '../stores/MarkersStore';
 import { IMAGES_URL } from '../lib/Constants';
+import defaultMarker from '../assets/default-marker.png';
+import missingMarker from '../assets/missing-marker.png';
 
 import 'leaflet-draw';
 import 'leaflet-draw/dist/leaflet.draw.css';
@@ -116,7 +118,17 @@ class MarkersMap extends Component {
         if (!map) { return; }
 
         var greyIcon = new L.Icon({
-            iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
+            iconUrl: missingMarker,
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            tooltipAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        var defaultIcon = new L.Icon({
+            iconUrl: defaultMarker,
             shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
             iconSize: [25, 41],
             iconAnchor: [12, 41],
@@ -137,7 +149,7 @@ class MarkersMap extends Component {
 
         if(markers && markers.length > 0) {
             let groups = {
-                "Present": {icon: null, f: (e) => { return e.isPresentInBook; }},
+                "Present": {icon: defaultIcon, f: (e) => { return e.isPresentInBook; }},
                 "Non-present in 90s": {icon: greyIcon, f: (e) => {return !e.isPresentInBook; }}
             };
 

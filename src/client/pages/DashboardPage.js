@@ -11,8 +11,10 @@ class DashboardPage extends Component {
         let { markers, zoom, mapCenter } = this.props.Markers;
 
         return (
-            <div className="ui main container">
-                <MarkersMap markers={markers} zoom={zoom} mapCenter={mapCenter} />
+            <div className="main ui container">
+                <div className="ui raised segment map">
+                    <MarkersMap markers={markers} zoom={zoom} mapCenter={mapCenter} />
+                </div>
             </div>
         );
     }
