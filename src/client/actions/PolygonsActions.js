@@ -20,7 +20,7 @@ class PolygonsActions {
             })
             .then(data => {
                 console.log('woogohhog', data);
-                this.updateRegionInfo(page.data);
+                this.updateRegionInfo(data);
             });
         };
     }
