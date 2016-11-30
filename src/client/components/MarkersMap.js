@@ -10,6 +10,7 @@ import missingMarker from '../assets/missing-marker.png';
 import MarkerPopup from './MarkerPopup';
 
 import 'leaflet-draw';
+import 'leaflet-draw/dist/leaflet.draw.css';
 
 class MarkersMap extends Component {
     constructor() {
