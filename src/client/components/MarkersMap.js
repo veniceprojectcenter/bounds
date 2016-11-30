@@ -170,8 +170,14 @@ class MarkersMap extends Component {
                     let faceImageDiv;
                     let faceImage = _.filter(marker.images, (image) => { return image.type == 'side-1'; });
                     if (faceImage.length > 0) {
+                        let imageStyle = {
+                            'background-image': 'url(' + (IMAGES_URL + faceImage[0].src) + ')',
+                            'background-size': 'cover',
+                            'background-position': '50%'
+                        };
+
                         faceImageDiv = (
-                            <img className="popup-img" src={IMAGES_URL + faceImage[0].src} height="150px" />
+                            <div className="popup-img" style={imageStyle}></div>
                         );
                     }
 
