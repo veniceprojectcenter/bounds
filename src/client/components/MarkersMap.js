@@ -171,7 +171,7 @@ class MarkersMap extends Component {
                     let faceImage = _.filter(marker.images, (image) => { return image.type == 'side-1'; });
                     if (faceImage.length > 0) {
                         faceImageDiv = (
-                            <img src={IMAGES_URL + faceImage[0].src} height="150px" />
+                            <img className="popup-img" src={IMAGES_URL + faceImage[0].src} height="150px" />
                         );
                     }
 
@@ -183,7 +183,7 @@ class MarkersMap extends Component {
                             {faceImageDiv}
                             <br />
 
-                            <div className="ui animated button" tabindex="0">
+                            <div className="ui animated button" tabIndex="0">
                                 <div className="visible content">See More</div>
                                 <div className="hidden content">
                                     <a href={`#/marker/${marker._id}`}>
