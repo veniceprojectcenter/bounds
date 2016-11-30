@@ -4,14 +4,13 @@ import ReactDOMServer from 'react-dom/server';
 
 import MarkersActions from '../actions/MarkersActions';
 import MarkersStore from '../stores/MarkersStore';
-import { IMAGES_URL } from '../lib/Constants';
 import defaultMarker from '../assets/default-marker.png';
 import missingMarker from '../assets/missing-marker.png';
 
+import MarkerPopup from './MarkerPopup';
+
 import 'leaflet-draw';
 import 'leaflet-draw/dist/leaflet.draw.css';
-
-import _ from 'lodash';
 
 class MarkersMap extends Component {
     constructor() {
@@ -166,38 +165,9 @@ class MarkersMap extends Component {
                 let { f, icon } = groups[key];
 
                 let presentMarkers = _.filter(markers, f).map((marker) => { 
-
-                    let faceImageDiv;
-                    let faceImage = _.filter(marker.images, (image) => { return image.type == 'side-1'; });
-                    if (faceImage.length > 0) {
-                        let imageStyle = {
-                            'background-image': 'url(' + (IMAGES_URL + faceImage[0].src) + ')',
-                            'background-size': 'cover',
-                            'background-position': '50%'
-                        };
-
-                        faceImageDiv = (
-                            <div className="popup-img" style={imageStyle}></div>
-                        );
-                    }
-
+                    
                     let popupBody = ReactDOMServer.renderToStaticMarkup(
-                        <div className="marker-popup">
-                            Marker #{marker.number}
-                            <br />
-
-                            {faceImageDiv}
-                            <br />
-
-                            <div className="ui animated button" tabIndex="0">
-                                <div className="visible content">See More</div>
-                                <div className="hidden content">
-                                    <a href={`#/marker/${marker._id}`}>
-                                        <i className="right arrow icon"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+                        <MarkerPopup marker={marker} />
                     );
 
                     return L.marker(marker.coordinates, icon ? {icon: icon} : null)
