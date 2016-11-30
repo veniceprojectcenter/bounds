@@ -4,7 +4,7 @@ import boundsLogo from '../assets/boundsLogo.png';
 
 const Header = ({ isLoggedIn }) => {
     return (
-        <div className="ui fixed inverted menu">
+        <div className="ui stackable inverted menu">
             <div className="ui container header-nav">
                 <div className="header item">
                     <img className="bounds logo" src={boundsLogo} />

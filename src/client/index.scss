@@ -1,11 +1,8 @@
-html {
-  height: inherit;
-  min-height: 100vh;
+body,html {
+	height: auto;
 }
 
 body {
-  height: 100%;
-  min-height: 100vh;
   background-color: #EFE793;
 }
 
@@ -46,7 +43,7 @@ img {
 	height: 200px;
 }
 
-.ui.fixed.inverted.menu {
+.ui.stackable.inverted.menu {
 	background-color: #F4B070;
 }
 
@@ -68,4 +65,7 @@ img {
 	background: #DC6659;
 	padding: 0.4em;
 	border: 0!important;
+	margin-left: 6px !important;
+	margin-right: 6px !important;
+	width: auto;
 }
