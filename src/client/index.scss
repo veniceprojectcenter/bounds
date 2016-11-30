@@ -1,15 +1,15 @@
-html {
-  height: inherit;
-  min-height: 100vh;
+body,html {
+	height: auto;
 }
 
 body {
-  height: 100%;
-  min-height: 100vh;
+  background-color: #EFE793;
 }
 
 #map { 
 	height: calc(100vh - 100px);
+	z-index: 100;
+	margin: 0.1px;
 }
 
 .marker-info {
@@ -41,4 +41,31 @@ img {
 .marker-popup {
 	width: 200px;
 	height: 200px;
+}
+
+.ui.stackable.inverted.menu {
+	background-color: #F4B070;
+}
+
+.ui.menu>.ui.container {
+	margin: 0!important;
+}
+
+.header-nav a.item {
+	&:hover {
+		background: rgba(220, 102, 89, 0.85) !important;
+	}
+}
+
+.bounds.logo {
+	width: 100px !important;
+}
+
+.ui.raised.segment.map {
+	background: #DC6659;
+	padding: 0.4em;
+	border: 0!important;
+	margin-left: 6px !important;
+	margin-right: 6px !important;
+	width: auto;
 }

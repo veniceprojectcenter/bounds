@@ -1,12 +1,13 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
+import boundsLogo from '../assets/boundsLogo.png';
 
 const Header = ({ isLoggedIn }) => {
     return (
-        <div className="ui fixed inverted menu">
-            <div className="ui container">
+        <div className="ui stackable inverted menu">
+            <div className="ui container header-nav">
                 <div className="header item">
-                    Bounds
+                    <img className="bounds logo" src={boundsLogo} />
                 </div>
                 <Link className="item" to="/">Home</Link>
                 {!isLoggedIn ?
