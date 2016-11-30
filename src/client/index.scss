@@ -40,7 +40,6 @@ img {
 
 .marker-popup {
 	width: 200px;
-	height: 200px;
 }
 
 .ui.stackable.inverted.menu {
@@ -69,3 +68,35 @@ img {
 	margin-right: 6px !important;
 	width: auto;
 }
+
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+	color: black;
+	font-weight: 600; 
+	font-size: 16px;
+	text-align: center;
+}
+
+.leaflet-popup-content {
+	margin: 10px 1px;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+	padding: 5px 20px 0 0;
+	color: #fff;	
+}
+
+.ui.animated.button {
+	background: #DC6659;
+	color: #fff;	
+}
+
+.right.arrow.icon {
+	color: #fff;
+}
+
+.popup-img {
+	height: 150px;
+	width: 150px;
+	margin: 0 auto;
+}
+

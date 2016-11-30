@@ -4,14 +4,13 @@ import ReactDOMServer from 'react-dom/server';
 
 import MarkersActions from '../actions/MarkersActions';
 import MarkersStore from '../stores/MarkersStore';
-import { IMAGES_URL } from '../lib/Constants';
 import defaultMarker from '../assets/default-marker.png';
 import missingMarker from '../assets/missing-marker.png';
 
+import MarkerPopup from './MarkerPopup';
+
 import 'leaflet-draw';
 import 'leaflet-draw/dist/leaflet.draw.css';
-
-import _ from 'lodash';
 
 class MarkersMap extends Component {
     constructor() {
@@ -166,24 +165,9 @@ class MarkersMap extends Component {
                 let { f, icon } = groups[key];
 
                 let presentMarkers = _.filter(markers, f).map((marker) => { 
-
-                    let faceImageDiv;
-                    let faceImage = _.filter(marker.images, (image) => { return image.type == 'side-1'; });
-                    if (faceImage.length > 0) {
-                        faceImageDiv = (
-                            <img src={IMAGES_URL + faceImage[0].src} height="100px" />
-                        );
-                    }
-
+                    
                     let popupBody = ReactDOMServer.renderToStaticMarkup(
-                        <div className="marker-popup">
-                            Marker #{marker.number}
-                            <br />
-
-                            {faceImageDiv}
-                            <br />
-                            <a href={`#/marker/${marker._id}`}>See more...</a>
-                        </div>
+                        <MarkerPopup marker={marker} />
                     );
 
                     return L.marker(marker.coordinates, icon ? {icon: icon} : null)

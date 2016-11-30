@@ -12,6 +12,12 @@ import ImageGallery from '../components/ImageGallery';
 import Field from '../components/Field';
 import Dropdown from '../components/Dropdown';
 
+import { visitationStatuses } from '../lib/Enums';
+let visitedOptions = [];
+Object.keys(visitationStatuses).forEach((k) => { 
+    visitedOptions.push({label: visitationStatuses[k], value: k}); 
+});
+
 import _ from 'lodash';
 
 var photoOptions = [
@@ -26,14 +32,6 @@ var photoOptions = [
     { value: 'old-photo', label: 'Old photo' },
     { value: 'old-map', label: 'Old map' },
     { value: 'other', label: 'Other' }
-];
-
-var visitedOptions = [
-    { value: 0, label: '<Pick status>' },
-    { value: 'reached', label: 'Reached' },
-    { value: 'unreachable', label: 'Existing, but unreachable' },
-    { value: 'unsure', label: 'Unreachable, unknown' },
-    { value: 'missing', label: 'Confirmed, missing' }
 ];
 
 class Marker extends Component {
