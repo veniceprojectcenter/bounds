@@ -10,6 +10,7 @@ body {
 	height: calc(100vh - 100px);
 	z-index: 100;
 	margin: 0.1px;
+	border-radius: 10px;
 }
 
 .marker-info {
@@ -44,6 +45,7 @@ img {
 
 .ui.stackable.inverted.menu {
 	background-color: #1f1f1f;
+	border-radius: 0;
 }
 
 .ui.menu>.ui.container {
@@ -68,6 +70,7 @@ img {
 	margin-right: 6px !important;
 	width: auto;
 	box-shadow: 0 2px 4px 0 rgba(34,36,38,.5),0 2px 10px 0 rgba(34,36,38,.5);
+	border-radius: 10px;
 }
 
 .leaflet-popup-content-wrapper, .leaflet-popup-tip {
