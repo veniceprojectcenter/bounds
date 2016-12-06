@@ -12,9 +12,9 @@ class MarkerPopup extends Component {
         let faceImage = _.filter(marker.images, (image) => { return image.type == 'side-1'; });
         if (faceImage.length > 0) {
             let imageStyle = {
-                'background-image': 'url(' + (IMAGES_URL + faceImage[0].src) + ')',
-                'background-size': 'cover',
-                'background-position': '50%'
+                backgroundImage: 'url(' + (IMAGES_URL + faceImage[0].src) + ')',
+                backgroundSize: 'cover',
+                backgroundPosition: '50%'
             };
 
             faceImageDiv = (

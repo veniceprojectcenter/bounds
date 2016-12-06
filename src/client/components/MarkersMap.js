@@ -12,6 +12,8 @@ import MarkerPopup from './MarkerPopup';
 import 'leaflet-draw';
 import 'leaflet-draw/src/leaflet.draw.css';
 
+import Boundaries from '../boundaries';
+
 class MarkersMap extends Component {
     constructor() {
         super();
@@ -178,6 +180,17 @@ class MarkersMap extends Component {
                 let presentMarkersGroup = L.layerGroup(presentMarkers);
                 overlayMaps[key] = presentMarkersGroup;
                 presentMarkersGroup.addTo(map); 
+            });
+
+            var myStyle = {
+                "color": "#ff7800",
+                "weight": 5,
+                "opacity": 0.6
+            };
+
+            Object.keys(Boundaries).forEach((key) => {
+                let json = L.geoJSON(Boundaries[key], { style: myStyle });
+                overlayMaps[key] = json;
             });
 
             let markersControl = L.control.layers(null, overlayMaps);
