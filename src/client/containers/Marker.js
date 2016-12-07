@@ -4,11 +4,14 @@ import MarkersStore from '../stores/MarkersStore';
 import MarkersActions from '../actions/MarkersActions';
 import AltContainer from 'alt-container';
 
+import AppStore from '../stores/AppStore';
+
 import MarkerPage from '../pages/Marker';
 
 const Marker = ({ params: { id } }) => {
 	return (
 		<AltContainer stores={{
+			App: AppStore,
 	        marker: () => { return { store: MarkersStore, value: MarkersStore.getMarker(id) }; }
 	    }} actions={{
 	        MarkersActions

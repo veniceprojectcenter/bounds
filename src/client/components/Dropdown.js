@@ -12,7 +12,7 @@ class Dropdown extends Component {
         const { value, isDisabled, options, onChange } = this.props || {};
 
         return (
-            <Select value={value} options={options} onChange={(e) => onChange(e.value) } />
+            <Select value={value} options={options} onChange={(e) => onChange(e.value) } disabled={isDisabled} />
         );
     }
 }

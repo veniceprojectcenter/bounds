@@ -24,7 +24,7 @@ class Side extends Component {
     }
 
     render() {
-        const { side, marker, onChange } = this.props || {};
+        const { side, marker, onChange, isDisabled } = this.props || {};
 
         let vals = _.get(marker, 'sides.' + side + '.conditions', {});
         let length = Object.keys(vals).length || 1;
@@ -36,19 +36,19 @@ class Side extends Component {
 
                 <h3>Condition</h3>
 
-                Biological growth on marker: <Dropdown options={conditionOptions} value={_.get(marker, 'sides.' + side + '.conditions.growthOn')} onChange={onChange.bind(null, 'sides.' + side + '.conditions.growthOn')} />
+                Biological growth on marker: <Dropdown options={conditionOptions} value={_.get(marker, 'sides.' + side + '.conditions.growthOn')} isDisabled={isDisabled} onChange={onChange.bind(null, 'sides.' + side + '.conditions.growthOn')} />
                 <br />
 
-                Biological growth around marker: <Dropdown options={conditionOptions} value={_.get(marker, 'sides.' + side + '.conditions.growthAround')} onChange={onChange.bind(null, 'sides.' + side + '.conditions.growthAround')} />
+                Biological growth around marker: <Dropdown options={conditionOptions} value={_.get(marker, 'sides.' + side + '.conditions.growthAround')} isDisabled={isDisabled} onChange={onChange.bind(null, 'sides.' + side + '.conditions.growthAround')} />
                 <br />
 
-                Surface cracking: <Dropdown options={conditionOptions} value={_.get(marker, 'sides.' + side + '.conditions.surfaceCracking')} onChange={onChange.bind(null, 'sides.' + side + '.conditions.surfaceCracking')} />
+                Surface cracking: <Dropdown options={conditionOptions} value={_.get(marker, 'sides.' + side + '.conditions.surfaceCracking')} isDisabled={isDisabled} onChange={onChange.bind(null, 'sides.' + side + '.conditions.surfaceCracking')} />
                 <br />
 
-                Environmental discoloration: <Dropdown options={conditionOptions} value={_.get(marker, 'sides.' + side + '.conditions.discoloration')} onChange={onChange.bind(null, 'sides.' + side + '.conditions.discoloration')} />
+                Environmental discoloration: <Dropdown options={conditionOptions} value={_.get(marker, 'sides.' + side + '.conditions.discoloration')} isDisabled={isDisabled} onChange={onChange.bind(null, 'sides.' + side + '.conditions.discoloration')} />
                 <br />
 
-                Structural disintegration: <Dropdown options={conditionOptions} value={_.get(marker, 'sides.' + side + '.conditions.structuralDisintegration')} onChange={onChange.bind(null, 'sides.' + side + '.conditions.structuralDisintegration')} />
+                Structural disintegration: <Dropdown options={conditionOptions} value={_.get(marker, 'sides.' + side + '.conditions.structuralDisintegration')} isDisabled={isDisabled} onChange={onChange.bind(null, 'sides.' + side + '.conditions.structuralDisintegration')} />
                 <br />
                 <br />
                 <br />
@@ -58,22 +58,22 @@ class Side extends Component {
                 <h3>Base</h3>
 
                 <div className="ui form">
-                    <Field placeholder="Enter value" label="Height (in cm)" value={_.get(marker, 'sides.' + side + '.baseSize.height')} onChange={onChange.bind(null, 'sides.' + side + '.baseSize.height')} />
-                    <Field placeholder="Enter value" label="Width (in cm)" value={_.get(marker, 'sides.' + side + '.baseSize.width')} onChange={onChange.bind(null, 'sides.' + side + '.baseSize.width')} />
+                    <Field placeholder="Enter value" label="Height (in cm)" isDisabled={isDisabled} value={_.get(marker, 'sides.' + side + '.baseSize.height')} onChange={onChange.bind(null, 'sides.' + side + '.baseSize.height')} />
+                    <Field placeholder="Enter value" label="Width (in cm)" isDisabled={isDisabled} value={_.get(marker, 'sides.' + side + '.baseSize.width')} onChange={onChange.bind(null, 'sides.' + side + '.baseSize.width')} />
                 </div>
 
                 <h3>Ring</h3>
 
                 <div className="ui form">
-                    <Field placeholder="Enter value" label="Height (in cm)" value={_.get(marker, 'sides.' + side + '.ringSize.height')} onChange={onChange.bind(null, 'sides.' + side + '.ringSize.height')} />
-                    <Field placeholder="Enter value" label="Width (in cm)" value={_.get(marker, 'sides.' + side + '.ringSize.width')} onChange={onChange.bind(null, 'sides.' + side + '.ringSize.width')} />
+                    <Field placeholder="Enter value" label="Height (in cm)" isDisabled={isDisabled} value={_.get(marker, 'sides.' + side + '.ringSize.height')} onChange={onChange.bind(null, 'sides.' + side + '.ringSize.height')} />
+                    <Field placeholder="Enter value" label="Width (in cm)" isDisabled={isDisabled} value={_.get(marker, 'sides.' + side + '.ringSize.width')} onChange={onChange.bind(null, 'sides.' + side + '.ringSize.width')} />
                 </div>
 
                 <h3>Spire</h3>
 
                 <div className="ui form">
-                    <Field placeholder="Enter value" label="Height (in cm)" value={_.get(marker, 'sides.' + side + '.spireSize.height')} onChange={onChange.bind(null, 'sides.' + side + '.spireSize.height')} />
-                    <Field placeholder="Enter value" label="Width (in cm)" value={_.get(marker, 'sides.' + side + '.spireSize.width')} onChange={onChange.bind(null, 'sides.' + side + '.spireSize.width')} />
+                    <Field placeholder="Enter value" label="Height (in cm)" isDisabled={isDisabled} value={_.get(marker, 'sides.' + side + '.spireSize.height')} onChange={onChange.bind(null, 'sides.' + side + '.spireSize.height')} />
+                    <Field placeholder="Enter value" label="Width (in cm)" isDisabled={isDisabled} value={_.get(marker, 'sides.' + side + '.spireSize.width')} onChange={onChange.bind(null, 'sides.' + side + '.spireSize.width')} />
                 </div>
 
                 <ImageGallery images={(marker ? marker.images : [])} typeFilter={['side-' + side]} />
@@ -85,12 +85,14 @@ class Side extends Component {
 Side.defaultProps = {
     marker: {},
     side: null,
+    isDisabled: false,
     onChange: () => {}
 };
 
 Side.propTypes = {
     marker: PropTypes.object,
     side: PropTypes.number,
+    isDisabled: PropTypes.boolean,
     onChange: PropTypes.func
 };
 
