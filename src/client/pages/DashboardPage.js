@@ -21,10 +21,22 @@ class DashboardPage extends Component {
 
     handleRegionSelected(selectedRegion) {
         PolygonsActions.selectRegion(selectedRegion);
+        this.openModal();
     }
 
     handleDefaultBoundarySelected(boundary) {
         PolygonsActions.selectRegion(boundary.features[0].geometry);
+        this.openModal();
+    }
+
+    componentWillReceiveProps(newProps) {
+        if (newProps.Polygons.regionInfo) {
+            //this.openModal();
+        }
+    }
+
+    openModal() {
+        $('.ui.modal').modal('show');
     }
 
     handleBoundarySelect(boundary) {
@@ -35,6 +47,7 @@ class DashboardPage extends Component {
 
     render() {
         let { markers, zoom, mapCenter } = this.props.Markers;
+        let { regionInfo } = this.props.Polygons;
         let _this = this;
 
         let showBoundaries = [];
@@ -44,12 +57,34 @@ class DashboardPage extends Component {
                     showBoundaries.push(Boundaries[group][boundary]);
                 }
             });
-        })
+        });
+
+        let modal = (
+            <div className="ui modal">
+              <div className="header">Info for selected boundary</div>
+              <div className="content">
+                <p>Total population: {_.get(regionInfo, 'P1')}</p>
+                <p>By age groups of $lt; 5: {_.get(regionInfo, 'P14')}</p>
+                <p>People with university degree: {_.get(regionInfo, 'P47')}</p>
+                <p>People with high-school: {_.get(regionInfo, 'P48')}</p>
+                <p>Foreigners: {_.get(regionInfo, 'ST1')}</p>
+                <p>Work force: {_.get(regionInfo, 'P60')}</p>
+                <p>Jobs: {_.get(regionInfo, 'ADDETTI')}</p>
+                <p>ALTRI_RETRIB: {_.get(regionInfo, 'ALTRI_RETRIB')}</p>
+                <p>VOLONTARI: {_.get(regionInfo, 'VOLONTARI')}</p>
+                <p>Companies: {_.get(regionInfo, 'NUM_UNITA')}</p>
+                <p>Buildings: {_.get(regionInfo, 'E1')}</p>
+              </div>
+            </div>
+        );
 
         return (
-            <div className="ui raised segment map-bs">               
-                <BoundariesSelect boundaries={Boundaries} onChange={this.handleBoundarySelect.bind(this)} getInfo={this.handleDefaultBoundarySelected.bind(this)} />
-                <MarkersMap markers={markers} boundaries={showBoundaries} zoom={zoom} mapCenter={mapCenter} onRegionSelect={this.handleRegionSelected.bind(this)} />
+            <div>
+                { modal }
+                <div className="ui raised segment map-bs">
+                    <BoundariesSelect boundaries={Boundaries} onChange={this.handleBoundarySelect.bind(this)} getInfo={this.handleDefaultBoundarySelected.bind(this)} />
+                    <MarkersMap markers={markers} boundaries={showBoundaries} zoom={zoom} mapCenter={mapCenter} onRegionSelect={this.handleRegionSelected.bind(this)} />
+                </div>
             </div>
         );
     }
@@ -60,6 +95,9 @@ DashboardPage.propTypes = {
         markers: PropTypes.array,
         zoom: PropTypes.number,
         mapCenter: PropTypes.array
+    }),
+    Polygons: PropTypes.shape({
+        regionInfo: PropTypes.object
     })
 }
 
