@@ -17,8 +17,8 @@ class ICentoCippi extends Component {
 
         return (
             <div className="ui form">
-                <Field placeholder="Enter value" label="Structural Characteristics" isDisabled={isDisabled} value={_.get(marker, 'bookData.structuralChar')} onChange={onChange.bind(null, 'bookData.structuralChar')} />
-                <Field placeholder="Enter value" label="Conservation" isDisabled={isDisabled} value={_.get(marker, 'bookData.conservation')} onChange={onChange.bind(null, 'bookData.conservation')} />
+                <Field placeholder="Enter value" label="Structural Characteristics" isTextarea={true} isDisabled={isDisabled} value={_.get(marker, 'bookData.structuralChar')} onChange={onChange.bind(null, 'bookData.structuralChar')} />
+                <Field placeholder="Enter value" label="Conservation" isTextarea={true} isDisabled={isDisabled} value={_.get(marker, 'bookData.conservation')} onChange={onChange.bind(null, 'bookData.conservation')} />
 
                 <ImageGallery images={(marker ? marker.images : [])} typeFilter={['old-photo', 'old-map']} />
             </div>
