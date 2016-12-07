@@ -4,6 +4,7 @@ import ReactDOMServer from 'react-dom/server';
 
 import MarkersActions from '../actions/MarkersActions';
 import MarkersStore from '../stores/MarkersStore';
+
 import defaultMarker from '../assets/default-marker.png';
 import missingMarker from '../assets/missing-marker.png';
 
@@ -11,8 +12,6 @@ import MarkerPopup from './MarkerPopup';
 
 import 'leaflet-draw';
 import 'leaflet-draw/src/leaflet.draw.css';
-
-import Boundaries from '../boundaries';
 
 const COLORS = ["#006b7b",
 "#d5fb00",
@@ -128,10 +127,37 @@ class MarkersMap extends Component {
         map.on('draw:created', this.handlePolygonCreated.bind(this));
 
         this.drawMarkers(this.props.markers);
+        this.drawBoundaries(this.props.boundaries);
     }
 
     componentWillReceiveProps(nextProps) {
         this.drawMarkers(nextProps.markers);
+        this.drawBoundaries(nextProps.boundaries);
+    }
+
+    drawBoundaries(boundaries) {
+        let i = 0;
+        let mapObjects = [];
+
+        let { map } = this.state;
+
+        if (!map) { return; }
+        
+        boundaries.forEach((b) => {
+            let myStyle = {
+                "color": COLORS[i],
+                "weight": 5,
+                "opacity": 0.9
+            };
+
+            let json = L.geoJSON(b, { style: myStyle });
+            mapObjects.push(json);
+
+            i += 1;
+        });
+
+        let presentBoundariesGroup = L.layerGroup(mapObjects);
+        presentBoundariesGroup.addTo(map); 
     }
 
     drawMarkers(markers) {
@@ -202,19 +228,6 @@ class MarkersMap extends Component {
                 presentMarkersGroup.addTo(map); 
             });
 
-            let i = 0;
-            Object.keys(Boundaries).forEach((key) => {
-                let myStyle = {
-                    "color": COLORS[i],
-                    "weight": 5,
-                    "opacity": 0.9
-                };
-                let json = L.geoJSON(Boundaries[key], { style: myStyle });
-                overlayMaps[key] = json;
-
-                i += 1;
-            });
-
             let markersControl = L.control.layers(null, overlayMaps);
             this.setState({markersControl});
 
@@ -231,6 +244,7 @@ class MarkersMap extends Component {
 
 MarkersMap.defaultProps = {
     markers: [],
+    boundaries: [],
     zoom: null,
     mapCenter: [],
     onRegionSelect: null
@@ -238,6 +252,7 @@ MarkersMap.defaultProps = {
 
 MarkersMap.propTypes = {
     markers: PropTypes.array,
+    boundaries: PropTypes.array,
     zoom: PropTypes.number,
     mapCenter: PropTypes.array,
     onRegionSelect: PropTypes.func

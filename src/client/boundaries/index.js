@@ -18,22 +18,32 @@ import CampagnaLupia from './CampagnaLupia';
 import Mira from './Mira';
 
 module.exports = {
-	"Metropolitan Area": Metropolitan,
-	"Comune di Venezia": Comune,
-	"Venezia-Murano-Burano": Venezia,
-    "Mestre-Carpenedo": Mestre,
-    "Marghera": Marghera,
-    "Lido-Pellestrina": Lido,
-    "Chirignago-Zelarino": Chirignago,
-    "Favaro Veneto": Favaro,
-    "Jesolo": Jesolo,
-    "Cavallino-Treporti": Cavallino,
-    "Chioggia": Chioggia,
-    "Mira": Mira,
-    "Campagna Lupia": CampagnaLupia,
-    "Codevigo, Padova": Codevigo,
-    "1791, Conterminazione Lagunare": Cippi,
-    "1924, Mussolini modification": Mussolini,
-    "1990, Lagoon Boundary": LatestConterminazione,
-    "Model Boundary: Insular Venice": InsularBaby
+	"Top Level": {
+		"Metropolitan Area": Metropolitan,
+		"Comune di Venezia": Comune
+	},
+	"Municipalities of Comune di Venezia": {
+		"Venezia-Murano-Burano": Venezia,
+	    "Mestre-Carpenedo": Mestre,
+	    "Marghera": Marghera,
+	    "Lido-Pellestrina": Lido,
+	    "Chirignago-Zelarino": Chirignago,
+	    "Favaro Veneto": Favaro
+	},
+	"Other Municipalities": {
+	    "Jesolo": Jesolo,
+	    "Cavallino-Treporti": Cavallino,
+	    "Chioggia": Chioggia,
+	    "Mira": Mira,
+	    "Campagna Lupia": CampagnaLupia,
+	    "Codevigo, Padova": Codevigo
+	},
+	"Lagoon Boundaries": {
+	    "1791, Conterminazione Lagunare": Cippi,
+	    "1924, Mussolini modification": Mussolini,
+	    "1990, Lagoon Boundary of Magistrato alle Acque": LatestConterminazione
+	},
+	"Models": {
+	    "Model Boundary: Insular Venice": InsularBaby
+	}
 };
