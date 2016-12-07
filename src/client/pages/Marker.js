@@ -1,6 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import {Link} from 'react-router';
 
+import AppActions from '../actions/AppActions';
+import AppStore from '../stores/AppStore';
+
 import MarkersActions from '../actions/MarkersActions';
 import MarkersStore from '../stores/MarkersStore';
 import UploadPhoto from '../components/UploadPhoto';
@@ -46,6 +49,7 @@ class Marker extends Component {
 
     componentDidMount() {
         MarkersActions.fetchMarkers();
+        AppActions.checkUser();
 
         this.activateSemanticUI();
     }
@@ -70,6 +74,7 @@ class Marker extends Component {
 
     render() {
         const { marker } = this.state || {};
+        let { isLoggedIn } = this.props.App;
 
         let saveButton;
         let _this = this;
@@ -88,7 +93,7 @@ class Marker extends Component {
             });
         }
 
-        if (this.state.changed) {
+        if (this.state.changed && isLoggedIn) {
             saveButton = <div>
                 <button onClick={this.saveMarker.bind(this)}>Save</button>
                 <br />
@@ -112,7 +117,11 @@ class Marker extends Component {
                                     <a className="item active" data-tab="general">Main info</a>
                                     <a className="item" data-tab="i-cento">Data from I Cento Cippi</a>
                                     <a className="item" data-tab="directions">Directions</a>
-                                    <a className="item" data-tab="photo-settings">Photo Upload & Categorization</a>
+                                    { 
+                                        isLoggedIn ? (
+                                            <a className="item" data-tab="photo-settings">Photo Upload & Categorization</a>
+                                        ) : null
+                                    }
                                 </div>
                             </div>
                             <div className="item">
@@ -136,21 +145,21 @@ class Marker extends Component {
 
                             <br /><br /><br />
 
-                            Visitation status: <Dropdown options={visitedOptions} value={_.get(marker, 'visitedStatus')} onChange={_this.updateField.bind(_this, 'visitedStatus')} />
+                            Visitation status: <Dropdown options={visitedOptions} value={_.get(marker, 'visitedStatus')} isDisabled={!isLoggedIn} onChange={_this.updateField.bind(_this, 'visitedStatus')} />
                             
                             <br /><br />
 
                             <div className="ui form">
-                                <Field placeholder="Enter value" label="Clockwise North Delta" value={_.get(marker, 'clockwiseNorthDelta')} onChange={_this.updateField.bind(_this, 'clockwiseNorthDelta')} />
-                                <Field placeholder="Enter value" label="Spire Triangle Height" value={_.get(marker, 'spireHeight')} onChange={_this.updateField.bind(_this, 'spireHeight')} />
-                                <Field placeholder="Enter value" label="Inscription" value={_.get(marker, 'inscription')} onChange={_this.updateField.bind(_this, 'inscription')} />
+                                <Field placeholder="Enter value" label="Clockwise North Delta" isDisabled={!isLoggedIn} value={_.get(marker, 'clockwiseNorthDelta')} onChange={_this.updateField.bind(_this, 'clockwiseNorthDelta')} />
+                                <Field placeholder="Enter value" label="Spire Triangle Height" isDisabled={!isLoggedIn} value={_.get(marker, 'spireHeight')} onChange={_this.updateField.bind(_this, 'spireHeight')} />
+                                <Field placeholder="Enter value" label="Inscription" isDisabled={!isLoggedIn} value={_.get(marker, 'inscription')} onChange={_this.updateField.bind(_this, 'inscription')} />
                             
                                 <ImageGallery images={(marker ? marker.images : [])} typeFilter={['surroundings', 'approach', 'inscription']} />
                             </div>
                         </div>
 
                         <div className="ui tab segment" data-tab="i-cento">
-                            <ICentoCippi marker={marker} onChange={_this.updateField.bind(_this)} />
+                            <ICentoCippi marker={marker} isDisabled={!isLoggedIn} onChange={_this.updateField.bind(_this)} />
                         </div>
 
                         <div className="ui tab segment" data-tab="directions">
@@ -160,15 +169,19 @@ class Marker extends Component {
                         { [1, 2, 3, 4].map(side => {
                             return (
                                 <div className="ui tab segment" data-tab={'side-' + side}>
-                                    <Side marker={marker} side={side} onChange={_this.updateField.bind(_this)} />
+                                    <Side marker={marker} side={side} isDisabled={!isLoggedIn} onChange={_this.updateField.bind(_this)} />
                                 </div>
                             );
                         }) }
 
-                        <div className="ui tab segment" data-tab="photo-settings">
-                            <UploadPhoto marker={marker} callback={ (ma) => { if (ma) { _this.setState({marker: ma}); } }} />
-                            {images}
-                        </div>
+                        { 
+                            isLoggedIn ? (
+                                <div className="ui tab segment" data-tab="photo-settings">
+                                    <UploadPhoto marker={marker} callback={ (ma) => { if (ma) { _this.setState({marker: ma}); } }} />
+                                    {images}
+                                </div>
+                            ) : null
+                        }
 
                     </div>
                 </div>
@@ -182,7 +195,10 @@ Marker.defaultProps = {
 };
 
 Marker.propTypes = {
-    marker: PropTypes.object
+    marker: PropTypes.object,
+    App: PropTypes.shape({
+        isLoggedIn: PropTypes.bool.isRequired
+    })
 };
 
 export default Marker;

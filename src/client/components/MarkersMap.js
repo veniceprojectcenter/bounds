@@ -10,7 +10,29 @@ import missingMarker from '../assets/missing-marker.png';
 import MarkerPopup from './MarkerPopup';
 
 import 'leaflet-draw';
-import 'leaflet-draw/dist/leaflet.draw.css';
+import 'leaflet-draw/src/leaflet.draw.css';
+
+import Boundaries from '../boundaries';
+
+const COLORS = ["#006b7b",
+"#d5fb00",
+"#0248ef",
+"#dba800",
+"#7485ff",
+"#00ae57",
+"#ff52c8",
+"#24ffdc",
+"#ae1700",
+"#a4c6ff",
+"#ff7d34",
+"#df79ff",
+"#3e5300",
+"#d7a8ff",
+"#caffce",
+"#00355f",
+"#ffac8d",
+"#662b00",
+"#ffdede"];
 
 class MarkersMap extends Component {
     constructor() {
@@ -178,6 +200,19 @@ class MarkersMap extends Component {
                 let presentMarkersGroup = L.layerGroup(presentMarkers);
                 overlayMaps[key] = presentMarkersGroup;
                 presentMarkersGroup.addTo(map); 
+            });
+
+            let i = 0;
+            Object.keys(Boundaries).forEach((key) => {
+                let myStyle = {
+                    "color": COLORS[i],
+                    "weight": 5,
+                    "opacity": 0.9
+                };
+                let json = L.geoJSON(Boundaries[key], { style: myStyle });
+                overlayMaps[key] = json;
+
+                i += 1;
             });
 
             let markersControl = L.control.layers(null, overlayMaps);
