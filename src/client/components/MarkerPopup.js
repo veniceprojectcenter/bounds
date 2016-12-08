@@ -34,7 +34,7 @@ class MarkerPopup extends Component {
                 <div className="ui animated button" tabIndex="0">
                     <div className="visible content">See More</div>
                     <div className="hidden content">
-                        <a href={`#/marker/${marker._id}`}>
+                        <a className="marker-arrow-link" href={`#/marker/${marker._id}`}>
                             <i className="right arrow icon"></i>
                         </a>
                     </div>

@@ -47,9 +47,13 @@ class DashboardPage extends Component {
         })
 
         return (
-            <div className="ui raised segment map-bs">               
-                <BoundariesSelect boundaries={Boundaries} onChange={this.handleBoundarySelect.bind(this)} getInfo={this.handleDefaultBoundarySelected.bind(this)} />
-                <MarkersMap markers={markers} boundaries={showBoundaries} zoom={zoom} mapCenter={mapCenter} onRegionSelect={this.handleRegionSelected.bind(this)} />
+            <div> 
+                <div>              
+                    <BoundariesSelect boundaries={Boundaries} onChange={this.handleBoundarySelect.bind(this)} getInfo={this.handleDefaultBoundarySelected.bind(this)} />
+                </div>    
+                <div className="marker-stupid-map"> 
+                    <MarkersMap markers={markers} boundaries={showBoundaries} zoom={zoom} mapCenter={mapCenter} onRegionSelect={this.handleRegionSelected.bind(this)} />
+                </div>
             </div>
         );
     }
