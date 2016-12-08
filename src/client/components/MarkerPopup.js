@@ -4,6 +4,8 @@ import { visitationStatuses } from '../lib/Enums';
 import _ from 'lodash';
 import { IMAGES_URL } from '../lib/Constants';
 
+import { OverallCondition, RestorationPotential } from '../lib/MarkerCondition';
+
 class MarkerPopup extends Component {
     render() {
     	let { marker } = this.props;
@@ -22,11 +24,24 @@ class MarkerPopup extends Component {
             );
         }
 
+        let conditionDiv;
+        let conditionGrade = OverallCondition(marker);
+        if (conditionGrade) {
+            conditionDiv = (
+                <div>
+                    Condition: {conditionGrade}
+                    <br />
+                    Restoration Potential: {RestorationPotential(marker)}
+                </div>
+            );
+        }
+
         return (
             <div className="marker-popup">
                 Marker #{marker.number}
                 <br />
                 {visitationStatuses[marker.visitedStatus]}
+                {conditionDiv}
 
                 {faceImageDiv}
                 <br />
