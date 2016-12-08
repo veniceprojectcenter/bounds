@@ -5,18 +5,21 @@ class BoundariesSelect extends Component {
         super();
     }
 
+    componentDidMount() {
+        $('.ui.accordion').accordion('refresh');
+    }
+
     render() {
         const { boundaries, onChange, getInfo } = this.props || {};
 
         let groups = Object.keys(boundaries).map((group) => {
             return (
-                <div className="ui styled fluid accordion">
+                <div className="">
                     <div className="title">
                         <i className="dropdown icon"></i>
                         {group}
                     </div>
-                    <div className="content">
-                        <p className="transition hidden">   
+                    <div className="content">   
                             {
                                 Object.keys(boundaries[group]).map((k) => {
                                     return (
@@ -25,14 +28,13 @@ class BoundariesSelect extends Component {
                                                 <input type="checkbox" onChange={onChange.bind(null, k)} />
                                                 <label>{k}</label>
                                                 <a onClick={getInfo.bind(null, boundaries[group][k])}>
-                                                    <i className="info icon"></i>   
+                                                    <i className="info circle icon"></i>   
                                                 </a>
                                             </div>
                                         </div>
                                     );
                                 })
                             }
-                        </p>
                     </div>
                 </div>    
             );
@@ -40,7 +42,9 @@ class BoundariesSelect extends Component {
 
         return (
             <div className="boundaries-select">
-                {groups}
+                <div className="ui styled fluid accordion">
+                    {groups}
+                </div>
             </div>
         );
     }

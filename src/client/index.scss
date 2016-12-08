@@ -108,9 +108,7 @@ img {
 .boundaries-select {
 	width: 30%;
 	box-sizing: border-box;
-	float: left;
-	background:	#588e81;
-	padding: 10px;
+	float: left;	
 	border-radius: 10px;
 	margin-left: 6px;
 	box-shadow: 0 2px 4px 0 rgba(34,36,38,.5),0 2px 10px 0 rgba(34,36,38,.5);
@@ -122,14 +120,6 @@ img {
 	float: right;
 }
 
-.boundary-layer-header {
-	//color: white;
-}
-
-.ui.checkbox label, .ui.checkbox label:hover {
-	//color: white;
-}
-
 .ui.checkbox a {
 	cursor: pointer;
 }
@@ -138,4 +128,8 @@ img {
 	display: inline-block;
 	color: #dc6659;
 	font-weight: bold;
+}
+
+.ui.checkbox .box, .ui.checkbox label {
+	display: inline-block;
 }
