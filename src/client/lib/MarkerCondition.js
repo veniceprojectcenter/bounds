@@ -16,21 +16,26 @@ let sideRestoration = (marker, side) => {
 		+ 0.05 * _.get(marker, 'sides.' + side + '.conditions.growthOn');
 };
 
+let calculateGrade = (func, marker) => {
+    let sum = 0;
+    let count = 0;
+
+    [1, 2, 3, 4].forEach((side) => {
+        let condition = func(marker, side);
+
+        if (condition) {
+            sum += condition;
+            count += 1;
+        }
+    });
+
+    let result = sum / count;
+    return Math.round(result * 100) / 100;
+};
+
 module.exports = {
     SideCondition: sideCondition,
     SideRestoration: sideRestoration,
-    OverallCondition: (marker) => {
-    	let result = _.sumBy([1, 2, 3, 4], (n) => {
-    		return sideCondition(marker, n);
-    	});
-
-        return Math.round(result * 100) / 100;
-    },
-    RestorationPotential: (marker) => {
-    	let result = _.sumBy([1, 2, 3, 4], (n) => {
-    		return sideRestoration(marker, n);
-    	});
-
-        return Math.round(result * 100) / 100;
-    }
+    OverallCondition: calculateGrade.bind(null, sideCondition),
+    RestorationPotential: calculateGrade.bind(null, sideRestoration)
 };
