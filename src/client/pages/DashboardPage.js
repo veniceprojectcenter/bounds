@@ -6,6 +6,8 @@ import MarkersMap from '../components/MarkersMap';
 import BoundariesSelect from '../components/BoundariesSelect';
 
 import Boundaries from '../boundaries';
+import { Bar } from 'react-chartjs-2';
+
 
 class DashboardPage extends Component {
     constructor() {
@@ -59,21 +61,48 @@ class DashboardPage extends Component {
             });
         });
 
+        let dataSet = [];
+        let labelSet = [];
+        let i = 14;
+
+        while (i <= 29) {
+            dataSet.push(_.get(regionInfo, 'P' + i));
+            labelSet.push((i != 29 ? ((i - 14) * 5) + " - " + ((i - 13) * 5 - 1) : '75+'));
+            i += 1;
+        }
+
+        const data = {
+          labels: labelSet,
+          datasets: [
+            {
+              label: 'Population by age group',
+              backgroundColor: 'rgba(255,99,132,0.2)',
+              borderColor: 'rgba(255,99,132,1)',
+              borderWidth: 1,
+              hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+              hoverBorderColor: 'rgba(255,99,132,1)',
+              data: dataSet
+            }
+          ]
+        };
+
         let modal = (
             <div className="ui modal">
               <div className="header">Info for selected boundary</div>
               <div className="content">
                 <p>Total population: {_.get(regionInfo, 'P1')}</p>
-                <p>By age groups of $lt; 5: {_.get(regionInfo, 'P14')}</p>
                 <p>People with university degree: {_.get(regionInfo, 'P47')}</p>
                 <p>People with high-school: {_.get(regionInfo, 'P48')}</p>
-                <p>Foreigners: {_.get(regionInfo, 'ST1')}</p>
                 <p>Work force: {_.get(regionInfo, 'P60')}</p>
                 <p>Jobs: {_.get(regionInfo, 'ADDETTI')}</p>
                 <p>ALTRI_RETRIB: {_.get(regionInfo, 'ALTRI_RETRIB')}</p>
                 <p>VOLONTARI: {_.get(regionInfo, 'VOLONTARI')}</p>
                 <p>Companies: {_.get(regionInfo, 'NUM_UNITA')}</p>
-                <p>Buildings: {_.get(regionInfo, 'E1')}</p>
+                <p>Commercial buildings: {_.get(regionInfo, 'E4')}</p>
+
+                <div>
+                    <Bar data={data} />
+                </div>
               </div>
             </div>
         );
