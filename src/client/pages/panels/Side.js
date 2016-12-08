@@ -7,6 +7,8 @@ import ImageGallery from '../../components/ImageGallery';
 
 import Dropdown from '../../components/Dropdown';
 
+import { SideCondition } from '../../lib/MarkerCondition';
+
 import _ from 'lodash';
 
 var conditionOptions = [
@@ -25,10 +27,6 @@ class Side extends Component {
 
     render() {
         const { side, marker, onChange, isDisabled } = this.props || {};
-
-        let vals = _.get(marker, 'sides.' + side + '.conditions', {});
-        let length = Object.keys(vals).length || 1;
-        let averageScale = _.sum(Object.keys(vals).map(e => vals[e])) / length;
 
         return (
             <div>
@@ -53,7 +51,7 @@ class Side extends Component {
                 <br />
                 <br />
 
-                Overall condition: { averageScale }
+                Overall condition: { SideCondition(marker, side) }
 
                 <h3>Base</h3>
 

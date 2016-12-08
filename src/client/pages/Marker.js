@@ -15,6 +15,8 @@ import ImageGallery from '../components/ImageGallery';
 import Field from '../components/Field';
 import Dropdown from '../components/Dropdown';
 
+import { OverallCondition, RestorationPotential } from '../lib/MarkerCondition';
+
 import { visitationStatuses } from '../lib/Enums';
 let visitedOptions = [];
 Object.keys(visitationStatuses).forEach((k) => { 
@@ -147,6 +149,11 @@ class Marker extends Component {
 
                             Visitation status: <Dropdown options={visitedOptions} value={_.get(marker, 'visitedStatus')} isDisabled={!isLoggedIn} onChange={_this.updateField.bind(_this, 'visitedStatus')} />
                             
+                            <br /><br /><br />
+
+                            Overall Marker Condition: <span>{OverallCondition(marker)}</span><br />
+                            Restoration Potential: <span>{RestorationPotential(marker)}</span>
+
                             <br /><br />
 
                             <div className="ui form">
