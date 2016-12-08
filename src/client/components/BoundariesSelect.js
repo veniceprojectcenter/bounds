@@ -28,7 +28,7 @@ class BoundariesSelect extends Component {
                                                 <input type="checkbox" onChange={onChange.bind(null, k)} />
                                                 <label>{k}</label>
                                                 <a onClick={getInfo.bind(null, boundaries[group][k])}>
-                                                    <i className="info circle icon"></i>   
+                                                    <i className="info circle icon"></i>
                                                 </a>
                                             </div>
                                         </div>

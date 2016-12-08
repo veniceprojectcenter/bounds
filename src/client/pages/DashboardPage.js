@@ -48,7 +48,7 @@ class DashboardPage extends Component {
 
         return (
             <div> 
-                <div>              
+                <div className="stupid-boundary-select">              
                     <BoundariesSelect boundaries={Boundaries} onChange={this.handleBoundarySelect.bind(this)} getInfo={this.handleDefaultBoundarySelected.bind(this)} />
                 </div>    
                 <div className="marker-stupid-map"> 
