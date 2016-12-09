@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-let sideCondition = (marker, side) => {
+let sideRestoration = (marker, side) => {
 	return 0.05 * _.get(marker, 'sides.' + side + '.conditions.structuralDisintegration')
 		+ 0.15 * _.get(marker, 'sides.' + side + '.conditions.surfaceCracking')
 		+ 0.25 * _.get(marker, 'sides.' + side + '.conditions.discoloration')
@@ -8,7 +8,7 @@ let sideCondition = (marker, side) => {
 		+ 0.30 * _.get(marker, 'sides.' + side + '.conditions.growthOn');
 };
 
-let sideRestoration = (marker, side) => {
+let sideCondition = (marker, side) => {
 	return 0.4 * _.get(marker, 'sides.' + side + '.conditions.structuralDisintegration')
 		+ 0.2 * _.get(marker, 'sides.' + side + '.conditions.surfaceCracking')
 		+ 0.2 * _.get(marker, 'sides.' + side + '.conditions.discoloration')
