@@ -164,3 +164,26 @@ img {
 		margin-right: 0px;
 	}
 }
+
+.marker-number {
+	background: #fff;
+	padding: 10px;
+	display: block;
+	border-radius: 5px;
+	margin: 0 auto;
+	width: 150px;
+	margin-bottom: 20px;
+	text-align:	center;
+}
+
+.ui.tab.active, .ui.tab.open {
+	margin-top: 0px;
+}
+
+.marker-top-pic {
+	float: right;
+}
+
+.marker-bottom-pic {
+	margin-top: 20px!important;
+}

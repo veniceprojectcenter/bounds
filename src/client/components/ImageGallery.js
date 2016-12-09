@@ -15,7 +15,7 @@ class ImageGallery extends Component {
             let url = IMAGES_URL + image.src;
             return (
                 <div className="ui medium rounded image">
-                    <a href={url} target="_blank"><img src={url} height="100px" /></a>
+                    <a href={url} target="_blank"><img className="ui image" src={url} height="100px" /></a>
                 </div>
             );
         });

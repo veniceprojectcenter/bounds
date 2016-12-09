@@ -141,26 +141,30 @@ class Marker extends Component {
 
                     <div className="twelve wide stretched column">
                         <div className="ui tab segment active" data-tab="general">
-                            Is Present in book: <span>{marker.isPresentInBook ? "yes" : "no"}</span><br />
-                            Coordinates: <span>{_.round(_.get(marker, 'coordinates.0'), 6)}, {_.round(_.get(marker, 'coordinates.1'), 6)}</span><br />
-                            Exact Address: <span>{marker.address}</span><br />
+                            <div className="ui small rounded images marker-top-pic">
+                                <ImageGallery images={(marker ? marker.images : [])} typeFilter={['side-1']} />
+                            </div>
+                            Overall Marker Condition: <span>{OverallCondition(marker)}</span><br />
+                            Restoration Potential: <span>{RestorationPotential(marker)}</span>
 
                             <br /><br /><br />
+
+                            Present in book: <span>{marker.isPresentInBook ? "yes" : "no"}</span><br />
+                            Coordinates: <span>{_.round(_.get(marker, 'coordinates.0'), 6)}, {_.round(_.get(marker, 'coordinates.1'), 6)}</span><br />
+                            Address: <span>{marker.address}</span><br />
+
+                            <br /><br />
 
                             Visitation status: <Dropdown options={visitedOptions} value={_.get(marker, 'visitedStatus')} isDisabled={!isLoggedIn} onChange={_this.updateField.bind(_this, 'visitedStatus')} />
                             
                             <br /><br /><br />
 
-                            Overall Marker Condition: <span>{OverallCondition(marker)}</span><br />
-                            Restoration Potential: <span>{RestorationPotential(marker)}</span>
-
-                            <br /><br />
-
                             <div className="ui form">
-                                <Field placeholder="Enter value" label="Clockwise North Delta" isDisabled={!isLoggedIn} value={_.get(marker, 'clockwiseNorthDelta')} onChange={_this.updateField.bind(_this, 'clockwiseNorthDelta')} />
-                                <Field placeholder="Enter value" label="Spire Triangle Height" isDisabled={!isLoggedIn} value={_.get(marker, 'spireHeight')} onChange={_this.updateField.bind(_this, 'spireHeight')} />
+                                <Field placeholder="Enter value" label="Degrees North" isDisabled={!isLoggedIn} value={_.get(marker, 'clockwiseNorthDelta')} onChange={_this.updateField.bind(_this, 'clockwiseNorthDelta')} />
+                                <Field placeholder="Enter value" label="Cap Triangle Height" isDisabled={!isLoggedIn} value={_.get(marker, 'spireHeight')} onChange={_this.updateField.bind(_this, 'spireHeight')} />
                                 <Field placeholder="Enter value" label="Inscription" isDisabled={!isLoggedIn} value={_.get(marker, 'inscription')} onChange={_this.updateField.bind(_this, 'inscription')} />
-                            
+                            </div>
+                            <div className="ui tiny rounded images marker-bottom-pic">
                                 <ImageGallery images={(marker ? marker.images : [])} typeFilter={['surroundings', 'approach', 'inscription']} />
                             </div>
                         </div>
