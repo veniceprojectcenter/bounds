@@ -5,34 +5,46 @@ class BoundariesSelect extends Component {
         super();
     }
 
+    componentDidMount() {
+        $('.ui.accordion').accordion('refresh');
+    }
+
     render() {
         const { boundaries, onChange, getInfo } = this.props || {};
 
         let groups = Object.keys(boundaries).map((group) => {
             return (
-                <div>
-                    <h3>{group}</h3>
-
-                    {
-                        Object.keys(boundaries[group]).map((k) => {
-                            return (
-                                <div>
-                                    <div className="ui checkbox">
-                                        <input type="checkbox" onChange={onChange.bind(null, k)} />
-                                        <label>{k}</label>
-                                        <a onClick={getInfo.bind(null, boundaries[group][k])}>get data</a>
-                                    </div>
-                                </div>
-                            );
-                        })
-                    }
+                <div className="">
+                    <div className="title">
+                        <i className="dropdown icon"></i>
+                        {group}
+                    </div>
+                    <div className="content">   
+                            {
+                                Object.keys(boundaries[group]).map((k) => {
+                                    return (
+                                        <div>
+                                            <div className="ui checkbox">
+                                                <input type="checkbox" onChange={onChange.bind(null, k)} />
+                                                <label>{k}</label>
+                                                <a onClick={getInfo.bind(null, boundaries[group][k])}>
+                                                    <i className="info circle icon"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    );
+                                })
+                            }
+                    </div>
                 </div>    
             );
         });
 
         return (
             <div className="boundaries-select">
-                {groups}
+                <div className="ui styled fluid accordion">
+                    {groups}
+                </div>
             </div>
         );
     }

@@ -18,11 +18,11 @@ import CampagnaLupia from './CampagnaLupia';
 import Mira from './Mira';
 
 module.exports = {
-	"Top Level": {
+	"Administrative Areas": {
 		"Metropolitan Area": Metropolitan,
 		"Comune di Venezia": Comune
 	},
-	"Municipalities of Comune di Venezia": {
+	"Municipalities: Comune di Venezia": {
 		"Venezia-Murano-Burano": Venezia,
 	    "Mestre-Carpenedo": Mestre,
 	    "Marghera": Marghera,
@@ -30,7 +30,7 @@ module.exports = {
 	    "Chirignago-Zelarino": Chirignago,
 	    "Favaro Veneto": Favaro
 	},
-	"Other Municipalities": {
+	"Other": {
 	    "Jesolo": Jesolo,
 	    "Cavallino-Treporti": Cavallino,
 	    "Chioggia": Chioggia,
