@@ -88,23 +88,55 @@ class DashboardPage extends Component {
 
         let modal = (
             <div className="ui modal">
-              <div className="header">Info for selected boundary</div>
-              <div className="content">
-                <p>Total population: {_.get(regionInfo, 'P1')}</p>
-                <p>People with university degree: {_.get(regionInfo, 'P47')}</p>
-                <p>People with high-school: {_.get(regionInfo, 'P48')}</p>
-                <p>Work force: {_.get(regionInfo, 'P60')}</p>
-                <p>Jobs: {_.get(regionInfo, 'ADDETTI')}</p>
-                <p>ALTRI_RETRIB: {_.get(regionInfo, 'ALTRI_RETRIB')}</p>
-                <p>VOLONTARI: {_.get(regionInfo, 'VOLONTARI')}</p>
-                <p>Companies: {_.get(regionInfo, 'NUM_UNITA')}</p>
-                <p>Commercial buildings: {_.get(regionInfo, 'E4')}</p>
-
+                <div className="header info-pop">Info for selected boundary</div>
+                <div className="ui list info-pop-list">
+                    <div className="item">
+                        <i className="users icon"></i>
+                        <div className="content">
+                            Total population: {_.get(regionInfo, 'P1')}
+                        </div>
+                    </div>
+                    <div className="item">
+                        <i className="university icon"></i>
+                        <div className="content">
+                            People with university degree: {_.get(regionInfo, 'P47')}
+                        </div>
+                    </div>
+                    <div className="item">
+                        <i className="student icon"></i>
+                        <div className="content">
+                            People with high-school: {_.get(regionInfo, 'P48')}
+                        </div>
+                    </div>
+                    <div className="item">
+                        <i className="suitcase icon"></i>
+                        <div className="content">
+                            Work force: {_.get(regionInfo, 'P60')}
+                        </div>
+                    </div>
+                    <div className="item">
+                        <i className="doctor icon"></i>
+                        <div className="content">
+                            Jobs: {_.get(regionInfo, 'ADDETTI')+_.get(regionInfo, 'ALTRI_RETRIB')+_.get(regionInfo, 'VOLONTARI')}
+                        </div>
+                    </div>
+                    <div className="item">
+                        <i className="building icon"></i>
+                        <div className="content">
+                            Companies: {_.get(regionInfo, 'NUM_UNITA')}
+                        </div>
+                    </div>
+                    <div className="item">
+                        <i className="hotel icon"></i>
+                        <div className="content">
+                            Commercial buildings: {_.get(regionInfo, 'E4')}
+                        </div>
+                    </div>
+                </div>
                 <div>
                     <Bar data={data} />
                 </div>
               </div>
-            </div>
         );
 
         return (

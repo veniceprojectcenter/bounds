@@ -32,6 +32,12 @@ class Side extends Component {
             <div>
                 <h3>Side #{side}</h3>
 
+                <div className="ui small rounded images marker-side-pic">
+                    <ImageGallery images={(marker ? marker.images : [])} typeFilter={['side-' + side]} />
+                </div>
+
+                Side condition: { SideCondition(marker, side) }
+
                 <h3>Condition</h3>
 
                 Biological growth on marker: <Dropdown options={conditionOptions} value={_.get(marker, 'sides.' + side + '.conditions.growthOn')} isDisabled={isDisabled} onChange={onChange.bind(null, 'sides.' + side + '.conditions.growthOn')} />
@@ -50,8 +56,6 @@ class Side extends Component {
                 <br />
                 <br />
                 <br />
-
-                Overall condition: { SideCondition(marker, side) }
 
                 <h3>Base</h3>
 
@@ -74,7 +78,6 @@ class Side extends Component {
                     <Field placeholder="Enter value" label="Width (in cm)" isDisabled={isDisabled} value={_.get(marker, 'sides.' + side + '.spireSize.width')} onChange={onChange.bind(null, 'sides.' + side + '.spireSize.width')} />
                 </div>
 
-                <ImageGallery images={(marker ? marker.images : [])} typeFilter={['side-' + side]} />
             </div>
         );
     }
