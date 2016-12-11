@@ -131,8 +131,10 @@ class MarkersMap extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.drawMarkers(nextProps.markers);
-        this.drawBoundaries(nextProps.boundaries);
+        if (this.props.markers != nextProps.markers || this.props.boundaries.length != nextProps.boundaries.length) {
+            this.drawMarkers(nextProps.markers);
+            this.drawBoundaries(nextProps.boundaries);
+        }
     }
 
     drawBoundaries(boundaries) {

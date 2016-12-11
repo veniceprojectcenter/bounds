@@ -16,13 +16,16 @@ class PolygonsActions {
             })
             .then(this.checkStatus)
             .then(response => {
-                return response.json()
+                return (response) ? response.json() : null;
             })
             .then(data => {
-                console.log('woogohhog', data);
                 this.updateRegionInfo(data);
             });
         };
+    }
+
+    clearRegion(a) {
+        return a;
     }
 
     checkStatus(response) {

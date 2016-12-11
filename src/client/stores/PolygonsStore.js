@@ -9,7 +9,8 @@ class PolygonsStore {
         this.bindListeners({
             handleSelectRegion: PolygonsActions.selectRegion,
             handleUpdateRegionInfo: PolygonsActions.updateRegionInfo,
-            handleFailed: PolygonsActions.failed
+            handleFailed: PolygonsActions.failed,
+            clearRegion: PolygonsActions.clearRegion
         });
 
         this.state = {
@@ -27,8 +28,6 @@ class PolygonsStore {
     }
 
     handleUpdateRegionInfo(regionInfo) {
-        console.log('asd', regionInfo);
-        
         this.setState({
             regionInfo
         });
@@ -39,6 +38,14 @@ class PolygonsStore {
 
         this.setState({
             errorMessage
+        });
+    }
+
+    clearRegion(a) {
+        this.setState({
+            regionInfo: null,
+            selectedRegion: null,
+            errorMessage: null
         });
     }
 }

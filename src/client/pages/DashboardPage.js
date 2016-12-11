@@ -4,9 +4,9 @@ import PolygonsActions from '../actions/PolygonsActions';
 import MarkersMap from '../components/MarkersMap';
 
 import BoundariesSelect from '../components/BoundariesSelect';
+import RegionInfo from '../components/RegionInfo';
 
 import Boundaries from '../boundaries';
-import { Bar } from 'react-chartjs-2';
 
 
 class DashboardPage extends Component {
@@ -23,25 +23,13 @@ class DashboardPage extends Component {
 
     handleRegionSelected(selectedRegion) {
         PolygonsActions.selectRegion(selectedRegion);
-        this.openModal();
     }
 
     handleDefaultBoundarySelected(boundary) {
         PolygonsActions.selectRegion(boundary.features[0].geometry);
-        this.openModal();
     }
 
-    componentWillReceiveProps(newProps) {
-        if (newProps.Polygons.regionInfo) {
-            //this.openModal();
-        }
-    }
-
-    openModal() {
-        $('.ui.modal').modal('show');
-    }
-
-    handleBoundarySelect(boundary) {
+    handleBoundaryClick(boundary) {
         let newState = this.state.boundaries;
         newState[boundary] = !newState[boundary];
         this.setState({boundaries: newState});
@@ -49,7 +37,7 @@ class DashboardPage extends Component {
 
     render() {
         let { markers, zoom, mapCenter } = this.props.Markers;
-        let { regionInfo } = this.props.Polygons;
+        let { regionInfo, selectedRegion, errorMessage } = this.props.Polygons;
         let _this = this;
 
         let showBoundaries = [];
@@ -61,89 +49,11 @@ class DashboardPage extends Component {
             });
         });
 
-        let dataSet = [];
-        let labelSet = [];
-        let i = 14;
-
-        while (i <= 29) {
-            dataSet.push(_.get(regionInfo, 'P' + i));
-            labelSet.push((i != 29 ? ((i - 14) * 5) + " - " + ((i - 13) * 5 - 1) : '75+'));
-            i += 1;
-        }
-
-        const data = {
-          labels: labelSet,
-          datasets: [
-            {
-              label: 'Population by age group',
-              backgroundColor: 'rgba(255,99,132,0.2)',
-              borderColor: 'rgba(255,99,132,1)',
-              borderWidth: 1,
-              hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-              hoverBorderColor: 'rgba(255,99,132,1)',
-              data: dataSet
-            }
-          ]
-        };
-
-        let modal = (
-            <div className="ui modal">
-                <div className="header info-pop">Info for selected boundary</div>
-                <div className="ui list info-pop-list">
-                    <div className="item">
-                        <i className="users icon"></i>
-                        <div className="content">
-                            Total population: {_.get(regionInfo, 'P1')}
-                        </div>
-                    </div>
-                    <div className="item">
-                        <i className="university icon"></i>
-                        <div className="content">
-                            People with university degree: {_.get(regionInfo, 'P47')}
-                        </div>
-                    </div>
-                    <div className="item">
-                        <i className="student icon"></i>
-                        <div className="content">
-                            People with high-school: {_.get(regionInfo, 'P48')}
-                        </div>
-                    </div>
-                    <div className="item">
-                        <i className="suitcase icon"></i>
-                        <div className="content">
-                            Work force: {_.get(regionInfo, 'P60')}
-                        </div>
-                    </div>
-                    <div className="item">
-                        <i className="doctor icon"></i>
-                        <div className="content">
-                            Jobs: {_.get(regionInfo, 'ADDETTI')+_.get(regionInfo, 'ALTRI_RETRIB')+_.get(regionInfo, 'VOLONTARI')}
-                        </div>
-                    </div>
-                    <div className="item">
-                        <i className="building icon"></i>
-                        <div className="content">
-                            Companies: {_.get(regionInfo, 'NUM_UNITA')}
-                        </div>
-                    </div>
-                    <div className="item">
-                        <i className="hotel icon"></i>
-                        <div className="content">
-                            Commercial buildings: {_.get(regionInfo, 'E4')}
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <Bar data={data} />
-                </div>
-              </div>
-        );
-
         return (
             <div> 
-                { modal }
+                <RegionInfo regionInfo={regionInfo} selectedRegion={selectedRegion} errorMessage={errorMessage} />
                 <div className="stupid-boundary-select">              
-                    <BoundariesSelect boundaries={Boundaries} onChange={this.handleBoundarySelect.bind(this)} getInfo={this.handleDefaultBoundarySelected.bind(this)} />
+                    <BoundariesSelect boundaries={Boundaries} onChange={this.handleBoundaryClick.bind(this)} getInfo={this.handleDefaultBoundarySelected.bind(this)} />
                 </div>    
                 <div className="marker-stupid-map">
                     <MarkersMap markers={markers} boundaries={showBoundaries} zoom={zoom} mapCenter={mapCenter} onRegionSelect={this.handleRegionSelected.bind(this)} />
@@ -160,7 +70,9 @@ DashboardPage.propTypes = {
         mapCenter: PropTypes.array
     }),
     Polygons: PropTypes.shape({
-        regionInfo: PropTypes.object
+        regionInfo: PropTypes.object,
+        selectedRegion: PropTypes.object,
+        errorMessage: PropTypes.string
     })
 }
 
