@@ -5,9 +5,13 @@ import PolygonsActions from '../actions/PolygonsActions';
 
 import { Bar } from 'react-chartjs-2';
 
+import 'leaflet-draw';
+import 'leaflet-draw/src/leaflet.draw.css';
+
 class RegionInfo extends Component {
     constructor() {
         super();
+        this.state = {};
     }
 
     openModal() {
@@ -24,9 +28,57 @@ class RegionInfo extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        if (!this.props.selectedRegion && newProps.selectedRegion) {
+        if (!this.props.regionInfo && newProps.selectedRegion) {
             this.openModal();
         }
+
+        if (newProps.selectedRegion == null) {
+            this.setState({initMap: false});
+        }
+    }
+
+    componentDidUpdate() {
+        if (this.state.initMap) { return; }
+
+        if (this.props.selectedRegion && this.props.regionInfo) {
+            console.log('two');
+            this.drawMap();
+        }
+    }
+
+    drawMap() {
+        let { map } = this.state;
+
+        if (!map) {
+            var osmUrl = 'https://api.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}@2x.png?access_token=pk.eyJ1IjoiZG12b3VsZGplZmYiLCJhIjoiY2l1MzBxMjYzMGlqMzMwandnajM2MjF2bCJ9.GhXYtRS36ehGO941Ro0llA',
+                osmAttrib = '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                osm = L.tileLayer(osmUrl, {maxZoom: 18});
+
+
+            let center = [45.4371300, 12.3326500];
+
+            map = L.map('smallMap', {layers: [osm], center: new L.LatLng(center[0], center[1]), zoom: 10});
+            this.setState({map});
+        } else {
+            map.eachLayer((layer) => {
+                if(!layer._url) {
+                    map.removeLayer(layer);
+                }
+            });
+        }
+
+        let myStyle = {
+                "color": "#006b7b",
+                "weight": 5,
+                "opacity": 0.9
+            };
+
+        let geojson = L.geoJSON(this.props.selectedRegion, { style: myStyle });
+        let featureGroup = L.featureGroup([geojson]);
+        featureGroup.addTo(map); 
+        map.fitBounds(featureGroup.getBounds());
+
+        this.setState({initMap: true});
     }
 
     // NASTIEST FIX
@@ -126,6 +178,7 @@ class RegionInfo extends Component {
             <div className="ui modal">
                 <div className="header info-pop">Info for selected boundary</div>
 
+                <div id="smallMap" style={{display: regionInfo ? '' : 'none'}}></div>
                 { (!regionInfo) ? loader : content }
 
                 <div className="actions">

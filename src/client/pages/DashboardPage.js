@@ -3,6 +3,7 @@ import MarkersActions from '../actions/MarkersActions';
 import PolygonsActions from '../actions/PolygonsActions';
 import MarkersMap from '../components/MarkersMap';
 
+import MarkersFilter from '../components/MarkersFilter';
 import BoundariesSelect from '../components/BoundariesSelect';
 import RegionInfo from '../components/RegionInfo';
 
@@ -13,12 +14,33 @@ class DashboardPage extends Component {
     constructor() {
         super();
         this.state = {
-            boundaries: {}
+            boundaries: {},
+            filters: {
+                attempted: {
+                    value: true,
+                    label: 'Visited in 2016',
+                    func: (marker) => {
+                        return marker.visitedStatus == null;
+                    }
+                },
+                nonAttempted: {
+                    value: true,
+                    label: 'Non-attempted',
+                    func: (marker) => {
+                        return marker.visitedStatus != null;
+                    }
+                }
+            }
         };
     }
 
     componentDidMount() {
         MarkersActions.fetchMarkers();
+        $('.ui.accordion').accordion('refresh');
+    }
+
+    componentDidUpdate() {
+        $('.ui.accordion').accordion('refresh');
     }
 
     handleRegionSelected(selectedRegion) {
@@ -35,9 +57,16 @@ class DashboardPage extends Component {
         this.setState({boundaries: newState});
     }
 
+    handleFilterClick(key) {
+        let newState = this.state.filters;
+        newState[key].value = !newState[key].value;
+        this.setState({filters: newState});
+    }
+
     render() {
         let { markers, zoom, mapCenter } = this.props.Markers;
         let { regionInfo, selectedRegion, errorMessage } = this.props.Polygons;
+        let { filters } = this.state;
         let _this = this;
 
         let showBoundaries = [];
@@ -49,14 +78,37 @@ class DashboardPage extends Component {
             });
         });
 
+        let filteredMarkers = markers;
+        Object.keys(filters).forEach((key) => {
+            if (!filters[key].value) {
+                filteredMarkers = _.filter(filteredMarkers, filters[key].func);
+            }
+        });
+
         return (
             <div> 
                 <RegionInfo regionInfo={regionInfo} selectedRegion={selectedRegion} errorMessage={errorMessage} />
-                <div className="stupid-boundary-select">              
-                    <BoundariesSelect boundaries={Boundaries} onChange={this.handleBoundaryClick.bind(this)} getInfo={this.handleDefaultBoundarySelected.bind(this)} />
+                <div className="marker-map-options">     
+                    <div className="boundaries-select">
+                        <div className="ui styled fluid accordion">    
+                            <MarkersFilter 
+                                markers={markers} 
+                                filters={filters}
+                                onPickFilter={this.handleFilterClick.bind(this)} />   
+                            <BoundariesSelect 
+                                boundaries={Boundaries} 
+                                onPickBoundary={this.handleBoundaryClick.bind(this)} 
+                                getInfo={this.handleDefaultBoundarySelected.bind(this)} />
+                        </div>
+                    </div>
                 </div>    
                 <div className="marker-stupid-map">
-                    <MarkersMap markers={markers} boundaries={showBoundaries} zoom={zoom} mapCenter={mapCenter} onRegionSelect={this.handleRegionSelected.bind(this)} />
+                    <MarkersMap 
+                        markers={filteredMarkers} 
+                        boundaries={showBoundaries} 
+                        zoom={zoom} 
+                        mapCenter={mapCenter} 
+                        onRegionSelect={this.handleRegionSelected.bind(this)} />
                 </div>
             </div>
         );

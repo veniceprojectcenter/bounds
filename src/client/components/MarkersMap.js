@@ -5,33 +5,37 @@ import ReactDOMServer from 'react-dom/server';
 import MarkersActions from '../actions/MarkersActions';
 import MarkersStore from '../stores/MarkersStore';
 
-import defaultMarker from '../assets/default-marker.png';
-import missingMarker from '../assets/missing-marker.png';
+import defaultMarkerImage from '../assets/default-marker.png';
+import missingMarkerImage from '../assets/missing-marker.png';
+import greenMarkerImage from '../assets/green-marker.png';
+import yellowMarkerImage from '../assets/yellow-marker.png';
+import redMarkerImage from '../assets/red-marker.png';
 
 import MarkerPopup from './MarkerPopup';
+import { OverallCondition } from '../lib/MarkerCondition';
+import { visitationStatuses } from '../lib/Enums';
 
 import 'leaflet-draw';
 import 'leaflet-draw/src/leaflet.draw.css';
 
-const COLORS = ["#006b7b",
-"#d5fb00",
-"#0248ef",
-"#dba800",
-"#7485ff",
-"#00ae57",
-"#ff52c8",
-"#24ffdc",
-"#ae1700",
-"#a4c6ff",
-"#ff7d34",
-"#df79ff",
-"#3e5300",
-"#d7a8ff",
-"#caffce",
-"#00355f",
-"#ffac8d",
-"#662b00",
-"#ffdede"];
+const COLORS = ["#006b7b", "#d5fb00", "#0248ef", "#dba800", "#7485ff", "#00ae57", "#ff52c8", "#24ffdc", "#ae1700",
+    "#a4c6ff", "#ff7d34", "#df79ff", "#3e5300", "#d7a8ff", "#caffce", "#00355f", "#ffac8d", "#662b00", "#ffdede"];
+
+const iconOptions = {
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    tooltipAnchor: [1, -34],
+    shadowSize: [41, 41]
+};
+
+const defaultIcon = new L.Icon(Object.assign({}, iconOptions, {iconUrl: defaultMarkerImage}));
+const missingIcon = new L.Icon(Object.assign({}, iconOptions, {iconUrl: missingMarkerImage}));
+const greenIcon = new L.Icon(Object.assign({}, iconOptions, {iconUrl: greenMarkerImage}));
+const yellowIcon = new L.Icon(Object.assign({}, iconOptions, {iconUrl: yellowMarkerImage}));
+const redIcon = new L.Icon(Object.assign({}, iconOptions, {iconUrl: redMarkerImage}));
+
 
 class MarkersMap extends Component {
     constructor() {
@@ -158,8 +162,11 @@ class MarkersMap extends Component {
             i += 1;
         });
 
-        let presentBoundariesGroup = L.layerGroup(mapObjects);
+        let presentBoundariesGroup = L.featureGroup(mapObjects);
         presentBoundariesGroup.addTo(map); 
+        if (mapObjects.length > 0) {
+            map.fitBounds(presentBoundariesGroup.getBounds());
+        }
     }
 
     drawMarkers(markers) {
@@ -168,26 +175,6 @@ class MarkersMap extends Component {
         const _this = this;
 
         if (!map) { return; }
-
-        var greyIcon = new L.Icon({
-            iconUrl: missingMarker,
-            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-            iconSize: [25, 41],
-            iconAnchor: [12, 41],
-            popupAnchor: [1, -34],
-            tooltipAnchor: [1, -34],
-            shadowSize: [41, 41]
-        });
-
-        var defaultIcon = new L.Icon({
-            iconUrl: defaultMarker,
-            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-            iconSize: [25, 41],
-            iconAnchor: [12, 41],
-            popupAnchor: [1, -34],
-            tooltipAnchor: [1, -34],
-            shadowSize: [41, 41]
-        });
 
         map.eachLayer((layer) => {
             if(!layer._url) {
@@ -200,41 +187,38 @@ class MarkersMap extends Component {
         }
 
         if(markers && markers.length > 0) {
-            let groups = {
-                "Present": {icon: defaultIcon, f: (e) => { return e.isPresentInBook; }},
-                "Non-present in 90s": {icon: greyIcon, f: (e) => {return !e.isPresentInBook; }}
-            };
-
-            if (this.state.markersControl) {
-                map.removeControl(this.state.markersControl);
-            }
-
-            var overlayMaps = {};
-
-            Object.keys(groups).forEach((key) => {
-                let { f, icon } = groups[key];
-
-                let presentMarkers = _.filter(markers, f).map((marker) => { 
-                    
-                    let popupBody = ReactDOMServer.renderToStaticMarkup(
-                        <MarkerPopup marker={marker} />
-                    );
-
-                    return L.marker(marker.coordinates, icon ? {icon: icon} : null)
-                        .bindPopup(popupBody)
-                        .bindTooltip("Marker #" + marker.number, {direction: 'top'}); 
-                });
+            let presentMarkers = markers.map((marker) => {
+                let icon = _this.getMarkerIcon(marker);
                 
-                let presentMarkersGroup = L.layerGroup(presentMarkers);
-                overlayMaps[key] = presentMarkersGroup;
-                presentMarkersGroup.addTo(map); 
+                let popupBody = ReactDOMServer.renderToStaticMarkup(
+                    <MarkerPopup marker={marker} />
+                );
+
+                return L.marker(marker.coordinates, {icon: icon})
+                    .bindPopup(popupBody)
+                    .bindTooltip("Marker #" + marker.number, {direction: 'top'}); 
             });
-
-            let markersControl = L.control.layers(null, overlayMaps);
-            this.setState({markersControl});
-
-            markersControl.addTo(map);
+            
+            let presentMarkersGroup = L.layerGroup(presentMarkers);
+            presentMarkersGroup.addTo(map); 
         }
+    }
+
+    getMarkerIcon(marker) {
+        const condition = OverallCondition(marker);
+        let icon = defaultIcon;
+
+        if (!marker.isPresentInBook || marker.visitedStatus == 'missing') {
+            icon = missingIcon;
+        } else if (condition <= 2.5) {
+            icon = greenIcon;
+        } else if (condition <= 3.5) {
+            icon = yellowIcon;
+        } else if (condition <= 5) {
+            icon = redIcon;
+        }
+
+        return icon;
     }
 
     render() {

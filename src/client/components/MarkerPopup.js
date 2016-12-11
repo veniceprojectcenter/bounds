@@ -36,11 +36,14 @@ class MarkerPopup extends Component {
             );
         }
 
+        const status = visitationStatuses[marker.visitedStatus] || 
+            (!marker.isPresentInBook ? "Missing" : visitationStatuses.default);
+
         return (
             <div className="marker-popup">
                 Marker #{marker.number}
                 <br />
-                {visitationStatuses[marker.visitedStatus]}
+                {status}
                 {conditionDiv}
 
                 {faceImageDiv}

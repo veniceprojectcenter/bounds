@@ -5,16 +5,12 @@ class BoundariesSelect extends Component {
         super();
     }
 
-    componentDidMount() {
-        $('.ui.accordion').accordion('refresh');
-    }
-
     render() {
-        const { boundaries, onChange, getInfo } = this.props || {};
+        const { boundaries, onPickBoundary, getInfo } = this.props || {};
 
         let groups = Object.keys(boundaries).map((group) => {
             return (
-                <div className="">
+                <div>
                     <div className="title">
                         <i className="dropdown icon"></i>
                         {group}
@@ -25,7 +21,7 @@ class BoundariesSelect extends Component {
                                     return (
                                         <div>
                                             <div className="ui checkbox">
-                                                <input type="checkbox" onChange={onChange.bind(null, k)} />
+                                                <input type="checkbox" onChange={onPickBoundary.bind(null, k)} />
                                                 <label>{k}</label>
                                                 <a onClick={getInfo.bind(null, boundaries[group][k])}>
                                                     <i className="info circle icon"></i>
@@ -41,32 +37,20 @@ class BoundariesSelect extends Component {
         });
 
         return (
-            <div className="boundaries-select">
-                <div className="ui styled fluid accordion">
-                    {groups}
-                </div>
-            </div>
+            <div>{groups}</div>
         );
     }
 }
 
 BoundariesSelect.defaultProps = {
-    value: null,
-    label: null,
-    placeholder: null,
-    isDisabled: false,
-    isTextarea: false,
-    onChange: () => {},
+    boundaries: [],
+    onPickBoundary: () => {},
     getInfo: () => {}
 };
 
 BoundariesSelect.propTypes = {
-    value: PropTypes.string,
-    label: PropTypes.string,
-    placeholder: PropTypes.string,
-    isDisabled: PropTypes.boolean,
-    isTextarea: PropTypes.boolean,
-    onChange: PropTypes.func,
+    boundaries: PropTypes.array,
+    onPickBoundary: PropTypes.func,
     getInfo: PropTypes.func
 };
 

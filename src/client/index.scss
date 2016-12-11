@@ -149,7 +149,7 @@ img {
 	}
 
 
-	.stupid-boundary-select {
+	.marker-map-options {
 		margin-left: 10px;
 		margin-right: 10px; 
 	}
@@ -199,3 +199,11 @@ img {
 	font-size: 16px !important;
 }
 
+.ui.accordion .active.content {
+	overflow: hidden;
+}
+
+#smallMap {
+	height: 230px;
+	width: 100%;
+}

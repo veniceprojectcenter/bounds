@@ -1,6 +1,6 @@
 module.exports = {
     visitationStatuses: {
-    	0: '<Pick status>',
+    	default: 'Unattempted',
 	    reached: 'Reached',
 	    unreachable: 'Existing, but unreachable',
 	    unsure: 'Unreachable, unknown',
