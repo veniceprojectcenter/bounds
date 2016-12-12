@@ -25,7 +25,7 @@ class DashboardPage extends Component {
                 },
                 nonAttempted: {
                     value: true,
-                    label: 'Non-attempted',
+                    label: 'Not Visited',
                     func: (marker) => {
                         return marker.visitedStatus != null;
                     }
