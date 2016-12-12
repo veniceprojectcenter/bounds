@@ -11,6 +11,7 @@ const polygonSchema = new Schema({
   census: { type: Object },
   comune: { type: String }
 });
+polygonSchema.index({centroid: '2dsphere'});
 
 const polygonModel = mongoose.model('polygon', polygonSchema);
 
