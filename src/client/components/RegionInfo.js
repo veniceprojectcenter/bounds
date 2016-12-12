@@ -143,7 +143,7 @@ class RegionInfo extends Component {
                                 <i className="student icon"></i>
                             </div>
                             <div className="content">
-                                People with high-school: {_.get(regionInfo, 'P48')}
+                                People with high-school diploma: {_.get(regionInfo, 'P48')}
                             </div>
                         </div>
                         <div className="item">
