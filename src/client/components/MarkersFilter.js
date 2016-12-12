@@ -25,7 +25,7 @@ class MarkersFilter extends Component {
             <div>
                 <div className="active title">
                     <i className="dropdown icon"></i>
-                    Options for 1971 Markers
+                    Cippi di Conterminazione Lagunare
                 </div>
                 <div className="active content">   
                     { options }
