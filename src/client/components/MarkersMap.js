@@ -10,6 +10,7 @@ import missingMarkerImage from '../assets/missing-marker.png';
 import greenMarkerImage from '../assets/green-marker.png';
 import yellowMarkerImage from '../assets/yellow-marker.png';
 import redMarkerImage from '../assets/red-marker.png';
+import notVisitMarkerImage from '../assets/not-visit-marker.png';
 
 import MarkerPopup from './MarkerPopup';
 import { OverallCondition } from '../lib/MarkerCondition';
@@ -35,6 +36,7 @@ const missingIcon = new L.Icon(Object.assign({}, iconOptions, {iconUrl: missingM
 const greenIcon = new L.Icon(Object.assign({}, iconOptions, {iconUrl: greenMarkerImage}));
 const yellowIcon = new L.Icon(Object.assign({}, iconOptions, {iconUrl: yellowMarkerImage}));
 const redIcon = new L.Icon(Object.assign({}, iconOptions, {iconUrl: redMarkerImage}));
+const notvisitIcon = new L.Icon(Object.assign({}, iconOptions, {iconUrl: notVisitMarkerImage}));
 
 
 class MarkersMap extends Component {
@@ -206,10 +208,12 @@ class MarkersMap extends Component {
 
     getMarkerIcon(marker) {
         const condition = OverallCondition(marker);
-        let icon = defaultIcon;
+        let icon = notvisitIcon;
 
         if (!marker.isPresentInBook || marker.visitedStatus == 'missing') {
             icon = missingIcon;
+        } else if (marker.visitedStatus == 'unsure' || marker.visitedStatus == 'unreachable') {
+            icon = defaultIcon;
         } else if (condition <= 2.5) {
             icon = greenIcon;
         } else if (condition <= 3.5) {
