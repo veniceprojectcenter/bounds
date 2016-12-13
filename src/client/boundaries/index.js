@@ -23,14 +23,31 @@ import AdditionIn1883 from './historic/AdditionIn1883';
 import AdditionIn1917 from './historic/AdditionIn1917';
 import AdditionIn1924 from './historic/AdditionIn1924';
 import AdditionIn1926 from './historic/AdditionIn1926';
+import BuranoMazzorboTorcello from './quartieri/BuranoMazzorboTorcello';
+import CarpenedoBissuola from './quartieri/CarpenedoBissuola';
+import ChirignagoGazzera from './quartieri/ChirignagoGazzera';
+import Cipressina from './quartieri/CipressinaZelarinoTrivignano';
+import Dorsoduro from './quartieri/DorsoduroPoloCroceGiudeccaSaccaFisola';
+import FavaroQuartiero from './quartieri/FavaroVeneto';
+import LidoMalamoccoAlberoni from './quartieri/LidoMalamoccoAlberoni';
+import MarcoCastello from './quartieri/MarcoCastelloElenaCannaregio';
+import MargheraCateneMalcontenta from './quartieri/MargheraCateneMalcontenta';
+import MestreCentro from './quartieri/MestreCentro';
+import MuranoErasmo from './quartieri/MuranoErasmo';
+import Pellestrina from './quartieri/PellestrinaPietroInVolta';
 
 
 module.exports = {
+	"Lagoon Boundaries": {
+	    "1791, Conterminazione Lagunare": Cippi,
+	    "1924, Mussolini modification": Mussolini,
+	    "1990, Lagoon Boundary of Magistrato alle Acque": LatestConterminazione
+	},
 	"Administrative Areas": {
 		"Metropolitan Area": Metropolitan,
 		"Comune di Venezia": Comune
 	},
-	"Municipalities: Comune di Venezia": {
+	"Municipalities": {
 		"Venezia-Murano-Burano": Venezia,
 	    "Mestre-Carpenedo": Mestre,
 	    "Marghera": Marghera,
@@ -38,7 +55,21 @@ module.exports = {
 	    "Chirignago-Zelarino": Chirignago,
 	    "Favaro Veneto": Favaro
 	},
-	"Other": {
+	"Quartieri": {
+		"Pellestrina, S. Pietro In Volta": Pellestrina,
+	    "Lido, Malamocco, Alberoni": LidoMalamoccoAlberoni,
+	    "Dorsoduro, S. Polo, S. Croce, Giudecca, Sacca Fisola": Dorsoduro,
+	    "S. Marco, Castello, S. Elena, Cannaregio": MarcoCastello,
+	    "Murano, S. Erasmo": MuranoErasmo,
+	    "Burano, Mazzorbo, Torcello": BuranoMazzorboTorcello,
+	    "Marghera, Catene, Malcontenta": MargheraCateneMalcontenta,
+	    "Mestre Centro": MestreCentro,
+	    "Carpenedo, Bissuola": CarpenedoBissuola,
+	    "Favaro Veneto": FavaroQuartiero,
+	    "Chirignago, Gazzera": ChirignagoGazzera,
+	    "Cipressina, Zelarino, Trivignano": Cipressina
+	},
+	"Surrounding Comuni”": {
 	    "Jesolo": Jesolo,
 	    "Cavallino-Treporti": Cavallino,
 	    "Chioggia": Chioggia,
@@ -46,12 +77,7 @@ module.exports = {
 	    "Campagna Lupia": CampagnaLupia,
 	    "Codevigo, Padova": Codevigo
 	},
-	"Lagoon Boundaries": {
-	    "1791, Conterminazione Lagunare": Cippi,
-	    "1924, Mussolini modification": Mussolini,
-	    "1990, Lagoon Boundary of Magistrato alle Acque": LatestConterminazione
-	},
-	"Historic Venice": {
+	"Historic Administrative Boundaries": {
 		"Pre-1883": Pre1883,
 		"Addition in 1883": AdditionIn1883,
 		"Addition in 1917": AdditionIn1917,

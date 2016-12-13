@@ -16,8 +16,8 @@ var conditionOptions = [
     { value: 1, label: '1 - Excellent' },
     { value: 2, label: '2 - Good' },
     { value: 3, label: '3 - Average' },
-    { value: 4, label: '4 - Fair' },
-    { value: 5, label: '5 - Poor' }
+    { value: 4, label: '4 - Poor' },
+    { value: 5, label: '5 - Very Poor' }
 ];
 
 class Side extends Component {
