@@ -69,7 +69,7 @@ module.exports = {
 	    "Chirignago, Gazzera": ChirignagoGazzera,
 	    "Cipressina, Zelarino, Trivignano": Cipressina
 	},
-	"Surrounding Comuni”": {
+	"Surrounding Comuni": {
 	    "Jesolo": Jesolo,
 	    "Cavallino-Treporti": Cavallino,
 	    "Chioggia": Chioggia,

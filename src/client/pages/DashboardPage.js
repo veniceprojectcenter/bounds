@@ -20,14 +20,14 @@ class DashboardPage extends Component {
                     value: true,
                     label: 'Visited in 2016',
                     func: (marker) => {
-                        return marker.visitedStatus == null;
+                        return marker.visitedStatus == null || marker.visitedStatus == 'default';
                     }
                 },
                 nonAttempted: {
                     value: true,
                     label: 'Not Visited',
                     func: (marker) => {
-                        return marker.visitedStatus != null;
+                        return marker.visitedStatus != null && marker.visitedStatus != 'default';
                     }
                 }
             }
